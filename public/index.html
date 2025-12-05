@@ -1,22 +1,35 @@
 <!doctype html>
 <html lang="pt">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Projeto-PIS — Página Inicial</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <header>
-      <img src="/images/logo.svg" alt="Logo" class="logo" />
-      <h1>Projeto-PIS</h1>
-    </header>
-    <main>
-      <p>Servidor Express a servir ficheiros estáticos da pasta <code>/public</code>.</p>
-      <p>Teste o endpoint de API: <a href="/api/health">/api/health</a></p>
-    </main>
-    <footer>
-      <p>&copy; 2024 Projeto-PIS. Todos os direitos reservados.</p>
-    </footer>
-  </body>
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="./css/Index.css" />
+</head>
+
+<body>
+    <!-- HAMBURGUER (aparece no mobile) -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <!-- Menu -->
+    <div class="navbar">
+
+        <div class="logo">
+            <div class="logo-icon">🎞️</div>
+            <div class="logo-text">[Nome a definir]</div>
+        </div>
+
+        <div class="menu">
+            <div class="menu-item">⬜ Visão Geral</div>
+            <div class="menu-item">🎬 Filmes & Séries</div>
+            <div class="menu-item">👤 Atores & Diretores</div>
+            <div class="menu-item">🏷️ Géneros</div>
+            <div class="menu-item">⭐ Reviews</div>
+        </div>
+    </div>
+</body>
 </html>
