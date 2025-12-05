@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo</title>
+    <link rel="stylesheet" href="/css/Login.css">
+</head>
+<body>
+     <div class="card">
+        <div class="icon">🎞️</div>
+
+        <h2>Criar Conta</h2>
+        <p>Registe-se para começar a gerir filmes e séries</p>
+
+        <form type="submit">
+            <p class="inputTitulo">Nome:</p>
+            <input type="text" placeholder="seu nome" id="clientNome">
+
+            <p class="inputTitulo">Email:</p>
+            <input type="email" placeholder="seu@email.com" id="clientEmail">
+
+             <p class="inputTitulo">Palavra-passe:</p>
+            <input type="password" placeholder="••••••••" id="clientPassword">
+
+            <p class="inputTitulo">Confirmar Palavra-passe:</p>
+            <input type="password" placeholder="••••••••" id="clientConfirmarPassword">
+            
+            <button type="submit">Registar</button>
+        </form>
+
+        <div class="register">
+           Já tem conta? <a href="#" onclick="transitionToLogin(event)">Entre aqui</a>
+        </div>
+    </div>
+
+    <script>
+        function transitionToLogin(event) {
+            event.preventDefault();
+            const card = document.querySelector('.card');
+            card.classList.add('slide-out-right');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 400);
+        }
+
+        // Animação de entrada ao carregar a página
+        window.addEventListener('load', () => {
+            const card = document.querySelector('.card');
+            card.classList.add('slide-in-left');
+        });
+    </script>
+</body>
+</html>

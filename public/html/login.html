@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/Login.css">
+</head>
+<body>
+     <div class="card">
+        <div class="icon">🎞️</div>
+
+        <h2>Bem-vindo</h2>
+        <p>Entre na sua conta para gerir filmes e séries</p>
+
+        <form type="submit">
+            <p class="inputTitulo">Email:</p>
+            <input type="email" placeholder="seu@email.com" id="clientEmail">
+
+             <p class="inputTitulo">Password:</p>
+            <input type="password" placeholder="••••••••" id="clientPassword">
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <div class="register">
+            Não tem conta? <a href="#" onclick="transitionToRegisto(event)">Registe-se aqui</a>
+        </div>
+    </div>
+
+    <script>
+        function transitionToRegisto(event) {
+            event.preventDefault();
+            const card = document.querySelector('.card');
+            card.classList.add('slide-out-left');
+            setTimeout(() => {
+                window.location.href = '/registo';
+            }, 400);
+        }
+
+        // Adicionar animação de entrada ao carregar a página
+        window.addEventListener('load', () => {
+            const card = document.querySelector('.card');
+            card.classList.add('slide-in-right');
+        });
+    </script>
+</body>
+</html>
