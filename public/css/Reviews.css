@@ -1,0 +1,150 @@
+body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f5f7ff;
+        padding: 30px;
+    }
+
+    /* TÍTULO */
+    .page-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1b3b7c;
+        margin-bottom: 5px;
+    }
+
+    .page-subtitle {
+        color: #5d6d91;
+        margin-bottom: 25px;
+    }
+
+    /* Review Box */
+    .review-card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 22px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        border: 1px solid #e4ecff;
+    }
+
+    /* Titulo review */
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    /* Icon filme */
+    .review-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .review-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        background: #f0f3ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        color: #5d6d91;
+    }
+
+    .review-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1b3b7c;
+    }
+
+    .tag {
+        background: #e5edff;
+        padding: 3px 10px;
+        border-radius: 8px;
+        color: #2f55d4;
+        font-size: 12px;
+        margin-top: 4px;
+        display: inline-block;
+    }
+
+    /* Estrelas */
+    .review-rating {
+        text-align: right;
+        color: #ffb000;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .review-rating small {
+        display: block;
+        color: #1b3b7c;
+        font-size: 13px;
+        margin-top: -3px;
+    }
+
+    /* Texto review */
+    .review-text {
+        background: #edf4ff;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        color: #394972;
+        font-style: italic;
+        font-size: 15px;
+    }
+
+    /* Review footer */
+    .review-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        color: #5d6d91;
+        font-size: 14px;
+    }
+
+    .review-footer-left,
+    .review-footer-right {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .footer-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: default;
+    }
+
+    .footer-action {
+        color: #2f55d4;
+        cursor: pointer;
+    }
+
+    .footer-action:hover {
+        text-decoration: underline;
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 700px) {
+        body {
+            padding: 15px;
+        }
+
+        .review-header {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .review-rating {
+            text-align: left;
+        }
+
+        .review-footer {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
