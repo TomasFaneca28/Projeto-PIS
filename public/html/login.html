@@ -13,29 +13,70 @@
         <h2>Bem-vindo</h2>
         <p>Entre na sua conta para gerir filmes e séries</p>
 
-        <form type="submit">
+        <form id="loginForm">
             <p class="inputTitulo">Email:</p>
-            <input type="email" placeholder="seu@email.com" id="clientEmail">
+            <input type="email" placeholder="seu@email.com" id="clientEmail" name="email" required>
 
-             <p class="inputTitulo">Password:</p>
-            <input type="password" placeholder="••••••••" id="clientPassword">
+             <p class="inputTitulo">Palavra-passe:</p>
+            <input type="password" placeholder="••••••••" id="clientPassword" name="password" required>
 
             <button type="submit">Entrar</button>
         </form>
 
+        <div id="mensagemSucesso"></div>
+        <div id="mensagemErro"></div>
+
         <div class="register">
-            Não tem conta? <a href="#" onclick="transitionToRegisto(event)">Registe-se aqui</a>
+            Não tem conta? <a href="/registo" onclick="transitionToRegisto(event)">Registe-se aqui</a>
         </div>
     </div>
 
     <script>
+        const form = document.getElementById('loginForm');
+        const mensagemSucesso = document.getElementById('mensagemSucesso');
+        const mensagemErro = document.getElementById('mensagemErro');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = {
+                email: document.getElementById('clientEmail').value,
+                password: document.getElementById('clientPassword').value
+            };
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    mensagemErro.style.display = 'none';
+                    mensagemSucesso.textContent = data.message;
+                    mensagemSucesso.style.display = 'block';
+                    localStorage.setItem('userId', data.userId);
+                    //setTimeout(() => window.location.href = '/reviews', 1500);
+
+                } else {
+                   mensagemSucesso.style.display = 'none';
+                   mensagemErro.textContent = data.error;
+                   mensagemErro.style.display = 'block';
+                }
+            } catch (error) {
+                mensagemSucesso.style.display = 'none';
+                mensagemErro.textContent = data.error;
+                mensagemErro.style.display = 'block';
+            }
+        });
+
         function transitionToRegisto(event) {
             event.preventDefault();
             const card = document.querySelector('.card');
             card.classList.add('slide-out-left');
-            setTimeout(() => {
-                window.location.href = '/registo';
-            }, 400);
+            window.location.href = '/registo';
         }
 
         // Adicionar animação de entrada ao carregar a página
