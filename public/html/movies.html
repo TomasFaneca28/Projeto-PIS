@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Filmes & Séries</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<include src="/html/navbar.html"></include>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>Filmes & Séries</h1>
+      <p>Gerir a sua coleção de filmes e séries</p>
+    </div>
+    <button class="btn primary" onclick="openMovieModal()">+ Adicionar</button>
+  </div>
+
+  <div id="moviesGrid" class="movies-grid"></div>
+</div>
+
+<!-- Modal Filme -->
+<div id="movieModal" class="modal">
+  <div class="modal-content">
+    <h2 id="movieModalTitle">Adicionar Filme/Série</h2>
+
+    <form onsubmit="saveMovie(event)">
+      <input type="hidden" id="movieId" />
+
+      <label>Nome</label>
+      <input id="title" required />
+
+      <label>Tipo</label>
+      <select id="type">
+        <option value="movie">Filme</option>
+        <option value="series">Série</option>
+      </select>
+
+      <label>Sinopse</label>
+      <textarea id="synopsis" required></textarea>
+
+      <label>Duração (min)</label>
+      <input type="number" id="duration" required />
+
+      <label>Ano</label>
+      <input type="number" id="year" required />
+
+      <div class="modal-actions">
+        <button type="button" class="btn outline" onclick="closeMovieModal()">Cancelar</button>
+        <button class="btn primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Review -->
+<div id="reviewModal" class="modal">
+  <div class="modal-content">
+    <h2>Adicionar Review</h2>
+
+    <form onsubmit="saveReview(event)">
+      <input type="hidden" id="reviewMovieId" />
+
+      <label>Classificação</label>
+      <select id="rating">
+        <option value="1">★</option>
+        <option value="2">★★</option>
+        <option value="3">★★★</option>
+        <option value="4">★★★★</option>
+        <option value="5" selected>★★★★★</option>
+      </select>
+
+      <label>Comentário</label>
+      <textarea id="comment" required></textarea>
+
+      <div class="modal-actions">
+        <button type="button" class="btn outline" onclick="closeReviewModal()">Cancelar</button>
+        <button class="btn primary">Adicionar</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="https://unpkg.com/htmlincludejs"></script>
+<script src="script.js"></script>
+</body>
+</html>
