@@ -1,86 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Filmes & Séries</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Filmes & Séries</title>
+
+    <link rel="stylesheet" href="./css/MovieSerie.css" />
 </head>
+
 <body>
-<include src="/html/navbar.html"></include>
-<div class="container">
-  <div class="header">
-    <div>
-      <h1>Filmes & Séries</h1>
-      <p>Gerir a sua coleção de filmes e séries</p>
+
+    <include src="/html/navbar.html"></include>
+
+    <main class="space-y-6">
+
+        <!-- CABEÇALHO -->
+        <section class="flex items-center justify-between">
+            <div>
+                <h1 class="text-blue-900 mb-2">Filmes & Séries</h1>
+                <p class="text-gray-600">
+                    Gerir a sua coleção de filmes e séries
+                </p>
+            </div>
+
+            <button class="btn-primary" onclick="openMovieDialog()">
+                ➕ Adicionar
+            </button>
+        </section>
+
+        <!-- GRID DE FILMES -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="moviesGrid">
+
+            <!-- CARD FILME (EXEMPLO) -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+
+                <div class="card-header">
+                    <div class="flex items-start space-x-3">
+                        <div class="bg-blue-100 p-2 rounded">
+                            🎬
+                        </div>
+                        <div>
+                            <h3 class="text-blue-900 mb-1">Inception</h3>
+                            <p class="text-xs text-gray-500">Christopher Nolan</p>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-1">
+                        <button class="icon-btn" onclick="editMovie()">
+                            ✏️
+                        </button>
+                        <button class="icon-btn danger" onclick="deleteMovie()">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-content space-y-3">
+                    <p class="text-sm text-gray-600 line-clamp-3">
+                        Um ladrão que rouba segredos corporativos através do uso da tecnologia de partilha de sonhos.
+                    </p>
+
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>148 min</span>
+                        <span>2010</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1">
+                        <span class="badge">Sci-Fi</span>
+                        <span class="badge">Ação</span>
+                    </div>
+
+                    <div class="flex items-center space-x-1 pt-2 border-t border-blue-50">
+                        ⭐ <span class="text-sm text-gray-700">4.5</span>
+                        <span class="text-xs text-gray-500">(12 reviews)</span>
+                    </div>
+
+                    <button class="btn-outline" onclick="openReviewDialog()">
+                        Adicionar Review
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAIS FILMES ENTRAM AQUI VIA JS -->
+
+        </section>
+
+    </main>
+
+    <!-- MODAL ADICIONAR / EDITAR FILME -->
+    <div class="modal" id="movieDialog">
+        <div class="modal-content">
+            <h2 class="text-blue-900 mb-2">Adicionar / Editar Filme</h2>
+
+            <form class="space-y-4">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label>Nome</label>
+                        <input type="text" required />
+                    </div>
+
+                    <div>
+                        <label>Tipo</label>
+                        <select>
+                            <option value="movie">Filme</option>
+                            <option value="series">Série</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Sinopse</label>
+                    <textarea rows="3" required></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label>Duração (min)</label>
+                        <input type="number" required />
+                    </div>
+
+                    <div>
+                        <label>Ano</label>
+                        <input type="number" required />
+                    </div>
+                </div>
+
+                <div>
+                    <label>Diretor</label>
+                    <select>
+                        <option>Christopher Nolan</option>
+                        <option>Steven Spielberg</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="btn-outline" onclick="closeMovieDialog()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar</button>
+                </div>
+
+            </form>
+        </div>
     </div>
-    <button class="btn primary" onclick="openMovieModal()">+ Adicionar</button>
-  </div>
 
-  <div id="moviesGrid" class="movies-grid"></div>
-</div>
+    <!-- MODAL REVIEW -->
+    <div class="modal" id="reviewDialog">
+        <div class="modal-content">
+            <h2 class="text-blue-900 mb-2">Adicionar Review</h2>
 
-<!-- Modal Filme -->
-<div id="movieModal" class="modal">
-  <div class="modal-content">
-    <h2 id="movieModalTitle">Adicionar Filme/Série</h2>
+            <form class="space-y-4">
+                <div>
+                    <label>Classificação</label>
+                    <select>
+                        <option>⭐ 1</option>
+                        <option>⭐⭐ 2</option>
+                        <option>⭐⭐⭐ 3</option>
+                        <option>⭐⭐⭐⭐ 4</option>
+                        <option>⭐⭐⭐⭐⭐ 5</option>
+                    </select>
+                </div>
 
-    <form onsubmit="saveMovie(event)">
-      <input type="hidden" id="movieId" />
+                <div>
+                    <label>Comentário</label>
+                    <textarea rows="4" required></textarea>
+                </div>
 
-      <label>Nome</label>
-      <input id="title" required />
+                <div class="flex justify-end space-x-2">
+                    <button type="button" class="btn-outline" onclick="closeReviewDialog()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-      <label>Tipo</label>
-      <select id="type">
-        <option value="movie">Filme</option>
-        <option value="series">Série</option>
-      </select>
+    <script src="https://unpkg.com/htmlincludejs"></script>
 
-      <label>Sinopse</label>
-      <textarea id="synopsis" required></textarea>
+    <!-- JS SIMPLES PARA MODAIS -->
+    <script>
+        function openMovieDialog() {
+            document.getElementById('movieDialog').style.display = 'flex';
+        }
 
-      <label>Duração (min)</label>
-      <input type="number" id="duration" required />
+        function closeMovieDialog() {
+            document.getElementById('movieDialog').style.display = 'none';
+        }
 
-      <label>Ano</label>
-      <input type="number" id="year" required />
+        function openReviewDialog() {
+            document.getElementById('reviewDialog').style.display = 'flex';
+        }
 
-      <div class="modal-actions">
-        <button type="button" class="btn outline" onclick="closeMovieModal()">Cancelar</button>
-        <button class="btn primary">Guardar</button>
-      </div>
-    </form>
-  </div>
-</div>
+        function closeReviewDialog() {
+            document.getElementById('reviewDialog').style.display = 'none';
+        }
 
-<!-- Modal Review -->
-<div id="reviewModal" class="modal">
-  <div class="modal-content">
-    <h2>Adicionar Review</h2>
+        function editMovie() {
+            openMovieDialog();
+        }
 
-    <form onsubmit="saveReview(event)">
-      <input type="hidden" id="reviewMovieId" />
+        function deleteMovie() {
+            if (confirm('Eliminar este filme?')) {
+                alert('Remover via JS depois');
+            }
+        }
+    </script>
 
-      <label>Classificação</label>
-      <select id="rating">
-        <option value="1">★</option>
-        <option value="2">★★</option>
-        <option value="3">★★★</option>
-        <option value="4">★★★★</option>
-        <option value="5" selected>★★★★★</option>
-      </select>
-
-      <label>Comentário</label>
-      <textarea id="comment" required></textarea>
-
-      <div class="modal-actions">
-        <button type="button" class="btn outline" onclick="closeReviewModal()">Cancelar</button>
-        <button class="btn primary">Adicionar</button>
-      </div>
-    </form>
-  </div>
-</div>
-<script src="https://unpkg.com/htmlincludejs"></script>
-<script src="script.js"></script>
 </body>
 </html>

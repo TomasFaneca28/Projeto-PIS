@@ -1,7 +1,6 @@
 {
   "name": "projeto-pis",
   "version": "1.0.0",
-  "description": "",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -18,7 +17,8 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "express": "^4.22.1",
-    "mysql2": "^3.15.3"
+    "mysql2": "^3.16.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
@@ -26,5 +26,6 @@
   "bugs": {
     "url": "https://github.com/TomasFaneca28/Projeto-PIS/issues"
   },
-  "homepage": "https://github.com/TomasFaneca28/Projeto-PIS#readme"
+  "homepage": "https://github.com/TomasFaneca28/Projeto-PIS#readme",
+  "description": ""
 }

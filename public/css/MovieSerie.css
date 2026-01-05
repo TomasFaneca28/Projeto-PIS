@@ -1,0 +1,292 @@
+* { box-sizing: border-box; font-family: Arial; }
+
+body {
+  background: #f8fafc;
+  padding: 24px;
+}
+
+.container { max-width: 1200px; margin: auto; }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary { background: #2563eb; color: white; }
+.outline { background: white; border: 1px solid #bfdbfe; color: #2563eb; }
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.card h3 { margin: 0; color: #1e3a8a; }
+
+.meta {
+  font-size: 12px;
+  color: #6b7280;
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ----------- TÍTULOS ----------- */
+.header h1 {
+  font-size: 26px;
+  color: #1e3a8a;
+  margin: 0;
+}
+
+.header p {
+  color: #6b7280;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+/* ----------- CARD HEADER ----------- */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card-header-left {
+  display: flex;
+  gap: 12px;
+}
+
+.icon-box {
+  background: #dbeafe;
+  color: #2563eb;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 18px;
+  height: fit-content;
+}
+
+/* ----------- SINOPSE ----------- */
+.synopsis {
+  font-size: 14px;
+  color: #475569;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+/* Limitar a 3 linhas */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ----------- GÉNEROS ----------- */
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.genre {
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ----------- RATING ----------- */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-top: 8px;
+  color: #374151;
+}
+
+.rating span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ----------- BOTÕES ----------- */
+.btn.small {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.btn.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ----------- MODAL MELHORADO ----------- */
+.modal-content h2 {
+  margin-top: 0;
+  color: #1e3a8a;
+}
+
+.modal-content label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.modal-content textarea {
+  resize: vertical;
+}
+
+/* ----------- RESPONSIVO ----------- */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* ----------- BOTÕES GERAIS ----------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  font-size: 14px;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ----------- TIPOS DE BOTÕES ----------- */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1e40af;
+}
+
+.btn-outline {
+  background-color: white;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+}
+
+.btn-outline:hover {
+  background-color: #eff6ff;
+}
+
+.btn-danger {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-danger:hover {
+  background-color: #fecaca;
+}
+
+/* ----------- BOTÕES PEQUENOS ----------- */
+.btn.small {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+/* ----------- BOTÕES COM ÍCONE ----------- */
+.btn.icon {
+  padding: 6px;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+}
+
+.btn.icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ----------- BOTÕES CHEIOS DE ÍCONE + TEXTO ----------- */
+.btn .icon-left {
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ----------- ESTADO DESATIVADO ----------- */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ----------- RESPONSIVO ----------- */
+@media (max-width: 600px) {
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

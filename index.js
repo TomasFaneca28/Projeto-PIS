@@ -7,7 +7,7 @@ const securePassword = require("./src/services/securePassword");
 var connectionOptions = {
  host: "localhost",
  user: "root",
- password: "1441",
+ password: "",
  database: "projetopis"
 };
 
@@ -37,6 +37,10 @@ app.get('/registo', (req, res) => {
 
 app.get('/reviews', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','html/reviews.html'));
+});
+
+app.get('/movies', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public','html/movies.html'));
 });
 
 

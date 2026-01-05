@@ -10,8 +10,144 @@
 
 <body>
     <include src="/html/navbar.html"></include>
-    
+
+    <!-- CONTEÚDO DA VISÃO GERAL -->
+    <main class="space-y-8">
+        
+        <!-- TÍTULO -->
+        <section>
+            <h1 class="text-blue-900 mb-2">Visão Geral</h1>
+            <p class="text-gray-600">
+                Estatísticas da sua coleção de filmes e séries
+            </p>
+        </section>
+
+        <!-- CARDS DE ESTATÍSTICAS -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Filmes -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+                <div class="card-header flex flex-row items-center justify-between pb-2">
+                    <span class="text-sm text-gray-600">Filmes</span>
+                    🎬
+                </div>
+                <div class="card-content">
+                    <div class="text-blue-900" id="moviesCount">0</div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Total de filmes cadastrados
+                    </p>
+                </div>
+            </div>
+
+            <!-- Séries -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+                <div class="card-header flex flex-row items-center justify-between pb-2">
+                    <span class="text-sm text-gray-600">Séries</span>
+                    📺
+                </div>
+                <div class="card-content">
+                    <div class="text-blue-900" id="seriesCount">0</div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Total de séries cadastradas
+                    </p>
+                </div>
+            </div>
+
+            <!-- Atores -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+                <div class="card-header flex flex-row items-center justify-between pb-2">
+                    <span class="text-sm text-gray-600">Atores</span>
+                    👥
+                </div>
+                <div class="card-content">
+                    <div class="text-blue-900" id="actorsCount">0</div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Atores registados
+                    </p>
+                </div>
+            </div>
+
+            <!-- Diretores -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+                <div class="card-header flex flex-row items-center justify-between pb-2">
+                    <span class="text-sm text-gray-600">Diretores</span>
+                    🎥
+                </div>
+                <div class="card-content">
+                    <div class="text-blue-900" id="directorsCount">0</div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Diretores registados
+                    </p>
+                </div>
+            </div>
+
+            <!-- Géneros -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+                <div class="card-header flex flex-row items-center justify-between pb-2">
+                    <span class="text-sm text-gray-600">Géneros</span>
+                    🏷️
+                </div>
+                <div class="card-content">
+                    <div class="text-blue-900" id="genresCount">0</div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Géneros diferentes
+                    </p>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="card border-blue-100 hover:shadow-lg transition-shadow">
+                <div class="card-header flex flex-row items-center justify-between pb-2">
+                    <span class="text-sm text-gray-600">Reviews</span>
+                    ⭐
+                </div>
+                <div class="card-content">
+                    <div class="text-blue-900" id="reviewsCount">0</div>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Avaliações feitas
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- LISTAS -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- FILMES & SÉRIES RECENTES -->
+            <div class="card border-blue-100">
+                <div class="card-header">
+                    <h2 class="text-blue-900">Filmes & Séries Recentes</h2>
+                </div>
+                <div class="card-content">
+                    <div class="space-y-4" id="recentMovies">
+                        <!-- 
+                          Aqui entram os filmes/séries via JavaScript:
+                          <div class="flex items-start space-x-3">...</div>
+                        -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- AVALIAÇÕES RECENTES -->
+            <div class="card border-blue-100">
+                <div class="card-header">
+                    <h2 class="text-blue-900">Avaliações Recentes</h2>
+                </div>
+                <div class="card-content">
+                    <div class="space-y-4" id="recentReviews">
+                        <!-- 
+                          Aqui entram as reviews via JavaScript
+                        -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/htmlincludejs"></script>
+    <script src="./js/overview.js"></script>
 </body>
 </html>
-
-<script src="https://unpkg.com/htmlincludejs"></script>
