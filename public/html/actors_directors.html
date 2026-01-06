@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt">
+<include src="/html/navbar.html"></include>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="./css/actors_directors.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Atores & Diretores</h1>
+        <p>Gerir atores e diretores da sua coleção</p>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('actors')">Atores</button>
+            <button class="tab" onclick="showTab('directors')">Diretores</button>
+        </div>
+
+        <div id="actorsTab" class="tab-content">
+            <button class="btn primary" onclick="openActorModal()">+ Adicionar Ator</button>
+            <div id="actorsGrid" class="grid"></div>
+        </div>
+
+        <div id="directorsTab" class="tab-content hidden">
+            <button class="btn primary" onclick="openDirectorModal()">+ Adicionar Diretor</button>
+            <div id="directorsGrid" class="grid"></div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal" class="modal">
+    <div class="modal-box">
+        <h2 id="modalTitle"></h2>
+
+        <form onsubmit="savePerson(event)">
+        <input type="hidden" id="personId">
+        <input type="hidden" id="personType">
+
+        <label>Nome</label>
+        <input id="name" required>
+
+        <label>Data de Nascimento</label>
+        <input type="date" id="birthdate" required>
+
+        <label>Nacionalidade</label>
+        <input id="nationality" required>
+
+        <div class="modal-actions">
+            <button type="button" class="btn outline" onclick="closeModal()">Cancelar</button>
+            <button class="btn primary">Guardar</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</body>
+
+</html>
+<script src="./js/actors_directors.js"></script>
+<script src="https://unpkg.com/htmlincludejs"></script>

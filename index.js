@@ -2,12 +2,12 @@ const express = require('express');
 var mysql = require('mysql2');
 const path = require('path');
 const securePassword = require("./src/services/securePassword");
-//const routes = require('./src/routes');
+const actorsDirectorsRoot = require('./src/routes/actors_directors');
 
 var connectionOptions = {
  host: "localhost",
  user: "root",
- password: "",
+ password: "MalduGod1204050",
  database: "projetopis"
 };
 
@@ -43,6 +43,11 @@ app.get('/movies', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','html/movies.html'));
 });
 
+app.get('/actors_directors', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public','html/actors_directors.html'));
+});
+
+app.use('/api/actors_directors',actorsDirectorsRoot);
 
 //API
 
