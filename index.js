@@ -134,11 +134,8 @@ app.post('/api/login', (req, res) => {
 
     res.status(200).json({ message: 'Login efetuado com sucesso', userId: user.id });
   });
+
 });
-
-
-
-
 
 app.listen(PORT, () => {
   console.log(`Servidor a correr na porta ${PORT}`);
