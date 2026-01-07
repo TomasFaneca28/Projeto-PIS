@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../../db');
+const db = require('../db/db');
 const tmdbService = require('../services/tmdbServices');
 
 router.post('/import/:tmdbId', async (req, res) => { /* ... */ });

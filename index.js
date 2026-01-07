@@ -7,7 +7,7 @@ require('dotenv').config();
 const tmdb = require('./src/routes/tmdb');
 const moviesRoutes = require('./src/routes/movies');
 
-const db = require('./db'); 
+const db = require('./src/db/db'); 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
