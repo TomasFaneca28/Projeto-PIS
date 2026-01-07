@@ -3,6 +3,8 @@ const path = require('path');
 const securePassword = require("./src/services/securePassword");
 const personsRoot = require('./src/routes/pessoas');
 const professionsRoot = require('./src/routes/profissoes');
+const generosRoot = require('./src/routes/generos');
+
 require('dotenv').config();
 const tmdb = require('./src/routes/tmdb');
 const moviesRoutes = require('./src/routes/movies');
@@ -45,6 +47,11 @@ app.get('/professions', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','html/professions.html'));
 });
 
+app.get('/generos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public','html/generos.html'));
+});
+
+app.use('/api/genero',generosRoot);
 app.use('/api/pessoas',personsRoot);
 app.use('/api/professions',professionsRoot);
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão de Pessoas e Profissões</title>
+  <link rel="stylesheet" href="../css/generos.css">
+  <include src="/html/navbar.html"></include>
+</head>
+<body>
+  <div class="container">
+        <h1>Gêneros</h1>
+        <div class="actions">
+            <button id="addBtn" class="btn primary">Adicionar Gênero</button>
+        </div>
+
+        <div id="formContainer" class="hidden card">
+            <input type="text" id="nome" placeholder="Nome do gênero" required>
+            <div class="actions">
+                <button id="saveBtn" class="btn primary">Salvar</button>
+                <button id="cancelBtn" class="btn outline">Cancelar</button>
+            </div>
+            
+        </div>
+
+        <div id="generosList" class="grid"></div>
+    </div>
+
+</body>
+</html>
+
+<script src="./js/generos.js"></script>
+<script src="https://unpkg.com/htmlincludejs"></script>
