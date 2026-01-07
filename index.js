@@ -2,15 +2,18 @@ const express = require('express');
 const path = require('path');
 const securePassword = require("./src/services/securePassword");
 const actorsDirectorsRoot = require('./src/routes/actors_directors');
+require('dotenv').config();
+const tmdb = require('./src/routes/tmdb');
+const moviesRoutes = require('./src/routes/movies');
 
 const db = require('./db'); 
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/api/movies', moviesRoutes);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','index.html'));
