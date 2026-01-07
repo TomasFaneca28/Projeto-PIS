@@ -40,6 +40,10 @@ app.get('/pessoas', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','html/pessoas.html'));
 });
 
+app.get('/professions', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public','html/professions.html'));
+});
+
 app.use('/api/pessoas',personsRoot);
 app.use('/api/professions',professionsRoot);
 
