@@ -1,27 +1,16 @@
 const express = require('express');
-var mysql = require('mysql2');
 const path = require('path');
 const securePassword = require("./src/services/securePassword");
 const actorsDirectorsRoot = require('./src/routes/actors_directors');
 
-var connectionOptions = {
- host: "localhost",
- user: "root",
- password: "MalduGod1204050",
- database: "projetopis"
-};
-
-var connection = mysql.createConnection(connectionOptions);
-
+const db = require('./db'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-connection.connect();
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','index.html'));
@@ -67,7 +56,7 @@ app.post('/api/registo', async (req, res) => {
   const getTipoIdQuery = 'SELECT id FROM tipoutilizador WHERE tipo = "normalUser"';
   
   // Obter o ID do tipo de utilizador "normalUser"
-  connection.query(getTipoIdQuery, (err, results) => {
+  db.query(getTipoIdQuery, (err, results) => {
     if (err) {
       return res.status(500).json({error: 'Erro ao obter o tipo de utilizador' });
     }
@@ -80,7 +69,7 @@ app.post('/api/registo', async (req, res) => {
 
     // Verificar se o email ja esta registado
     const verificaEmailQuery = 'SELECT * FROM utilizador WHERE email = ?';
-    connection.query(verificaEmailQuery, [email], async (err, results) => {
+    db.query(verificaEmailQuery, [email], async (err, results) => {
       if (err) {
         return res.status(500).json({error: 'Erro ao verificar o email' });
       }
@@ -93,11 +82,12 @@ app.post('/api/registo', async (req, res) => {
       const hashPassword = await securePassword.hash(password);
 
       const insertQuery = 'INSERT INTO utilizador (username, password, email, tipo) VALUES (?, ?, ?, ?)';
-      connection.query(insertQuery, [nome, hashPassword, email, tipoId], (err, results) => {
+      db.query(insertQuery, [nome, hashPassword, email, tipoId], (err, results) => {
         if (err) {
           return res.status(500).json({error: 'Erro ao criar utilizador' });
         }
         res.status(201).json({ message: 'Utilizador registado com sucesso', userId: results.insertId });
+      
       });
     });
   });
@@ -113,7 +103,7 @@ app.post('/api/login', (req, res) => {
 
   // Procura apenas o utilizador com o email fornecido
   const query = 'SELECT * FROM utilizador WHERE email = ?';
-  connection.query(query, [email], async (err, results) => {
+  db.query(query, [email], async (err, results) => {
 
     if (err) {
       return res.status(500).json({error: 'Erro no servidor' });
@@ -133,6 +123,7 @@ app.post('/api/login', (req, res) => {
     }
 
     res.status(200).json({ message: 'Login efetuado com sucesso', userId: user.id });
+  
   });
 
 });
