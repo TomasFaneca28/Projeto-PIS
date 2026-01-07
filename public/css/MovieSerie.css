@@ -13,6 +13,12 @@ body {
   margin-bottom: 24px;
 }
 
+.actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
 .btn {
   padding: 10px 16px;
   border-radius: 6px;

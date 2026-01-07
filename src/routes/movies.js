@@ -3,8 +3,15 @@ const router = express.Router();
 const db = require('../db/db');
 const tmdbService = require('../services/tmdbServices');
 
-router.post('/import/:tmdbId', async (req, res) => { /* ... */ });
-router.get('/', (req, res) => { /* ... */ });
+router.get('/', (req, res) => {  const query = `
+    SELECT id, nome, posterPath, DataLancamento, tipo
+    FROM Filme
+    ORDER BY DataLancamento DESC
+  `;
+  db.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: 'Erro ao obter filmes' });
+    res.json(results);
+  }); });
 
 // POST /api/movies/import/:tmdbId?type=movie
 router.post('/import/:tmdbId', async (req, res) => {
@@ -16,8 +23,8 @@ router.post('/import/:tmdbId', async (req, res) => {
 
     const insertFilme = `
       INSERT INTO Filme
-      (nome, DataLancamento, tipo, posterPath, sinopse, duracao, idPegi, idDiretorPessoa)
-      VALUES (?, ?, ?, ?, ?, ?, 1, 1)
+      (nome, idPegi, idDiretorPessoa, DataLancamento, tipo, posterPath, sinopse, duracao)
+      VALUES (?, 1, 1, ?, ?, ?, ?, ?)
     `;
 
     db.query(
