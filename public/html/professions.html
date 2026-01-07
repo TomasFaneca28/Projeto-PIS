@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Profissões</title>
+    <link rel="stylesheet" href="../css/professions.css">
+    <include src="/html/navbar.html"></include>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Profissões</h1>
+        <p>Gerir profissões da indústria cinematográfica</p>
+        <button id="addBtn">Adicionar Profissão</button>
+
+        <div id="formContainer" class="hidden">
+            <input type="text" id="tipo" placeholder="Nome da profissão" required>
+            <button id="saveBtn">Salvar</button>
+            <button id="cancelBtn">Cancelar</button>
+        </div>
+
+        <div id="professionsList"></div>
+    </div>
+
+   
+</body>
+</html>
+<script src="https://unpkg.com/htmlincludejs"></script>
+<script src="../js/profissoes.js"></script>

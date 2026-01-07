@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão de Pessoas e Profissões</title>
+  <link rel="stylesheet" href="../css/pessoas.css">
+  <include src="/html/navbar.html"></include>
+</head>
+<body>
+  <div class="container">
+    <h1>Pessoas</h1>
+   
+    <div class="actions">
+      <button id="addPersonBtn" class="btn primary">Adicionar Pessoa</button>
+    </div>
+   
+    <div id="personForm" class="hidden card">
+      <input type="text" id="personName" placeholder="Nome da Pessoa">
+      <label>Profissão:</label>
+      <select id="professionSelect"></select>
+      <div class="actions">
+        <button id="savePersonBtn" class="btn primary">Salvar</button>
+        <button id="cancelPersonBtn" class="btn outline">Cancelar</button>
+      </div>
+    </div>
+
+   
+    <h2 id="listaHeader">Lista de Pessoas</h2>
+    <div id="peopleList" class="grid"></div>
+  </div>
+
+</body>
+</html>
+
+<script src="./js/pessoas.js"></script>
+<script src="https://unpkg.com/htmlincludejs"></script>

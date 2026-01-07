@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+h1 {
+    color: #1e3a8a;
+}
+
+button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#addBtn {
+    background-color: #1e3a8a;
+    color: #fff;
+}
+
+#saveBtn {
+    background-color: #1e3a8a;
+    color: #fff;
+}
+
+#cancelBtn {
+    background-color: #ddd;
+}
+
+.hidden {
+    display: none;
+}
+
+.profession {
+    background: #f3f4f6;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+}
