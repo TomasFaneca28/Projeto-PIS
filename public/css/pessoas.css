@@ -65,4 +65,8 @@ body {
 
 .hidden { display: none; }
 
-
+.custom-select{
+    &, &::picker(select) {
+    appearance: base-select;    
+  }
+}

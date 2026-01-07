@@ -11,16 +11,20 @@
 
     <div class="container">
         <h1>Profissões</h1>
-        <p>Gerir profissões da indústria cinematográfica</p>
-        <button id="addBtn">Adicionar Profissão</button>
-
-        <div id="formContainer" class="hidden">
-            <input type="text" id="tipo" placeholder="Nome da profissão" required>
-            <button id="saveBtn">Salvar</button>
-            <button id="cancelBtn">Cancelar</button>
+        <div class="actions">
+            <button id="addBtn" class="btn primary">Adicionar Profissão</button>
         </div>
 
-        <div id="professionsList"></div>
+        <div id="formContainer" class="hidden card">
+            <input type="text" id="tipo" placeholder="Nome da profissão" required>
+            <div class="actions">
+                <button id="saveBtn" class="btn primary">Salvar</button>
+                <button id="cancelBtn" class="btn outline">Cancelar</button>
+            </div>
+            
+        </div>
+
+        <div id="professionsList" class="grid"></div>
     </div>
 
    

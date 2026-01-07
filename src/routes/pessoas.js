@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db= require('../db/db');
 
-
-
 // GET todas pessoas com a profissão
 router.get('/', (req, res) => {
   const sql = `

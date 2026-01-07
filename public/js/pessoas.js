@@ -2,7 +2,9 @@ const apiProf = '/api/professions';
 const apiPeople = '/api/pessoas';
 
 const professionSelect = document.getElementById('professionSelect');
+const filterProfession = document.getElementById('filterProfession');
 const peopleList = document.getElementById('peopleList');
+const personNameInput =document.getElementById('personName');
 
 const addPersonBtn = document.getElementById('addPersonBtn');
 const personForm = document.getElementById('personForm');
@@ -12,18 +14,30 @@ const cancelPersonBtn = document.getElementById('cancelPersonBtn');
 let professions = [];
 let editingPersonId = null; 
 
-// Buscar profissões
-function fetchProfessions() {
+//serve para fazer um request para selecionar todas as profissões e também para preencher os select's pretendidos
+
+function fetchProfessions(selectElement, keepFirstOption=false) {
+
   fetch(apiProf)
     .then(res => res.json())
     .then(data => {
-      professions = data;
-      professionSelect.innerHTML = '';
+      if (!keepFirstOption) {
+        selectElement.innerHTML = ''; 
+      } else {
+     
+        const firstOption = selectElement.querySelector('option');
+        selectElement.innerHTML = '';
+        if (firstOption) {
+          const clone = firstOption.cloneNode(true); 
+          selectElement.appendChild(clone);
+        }
+      }
+
       data.forEach(p => {
         const option = document.createElement('option');
         option.value = p.id;
         option.textContent = p.tipo;
-        professionSelect.appendChild(option);
+        selectElement.appendChild(option);
       });
     });
 }
@@ -34,12 +48,19 @@ function fetchPeople() {
     .then(res => res.json())
     .then(data => {
       peopleList.innerHTML = '';
-      if(!data || data.length === 0){
+      const selected = filterProfession.value;
+
+      // Filtrar pessoas
+      const filtered = selected === 'all'
+        ? data
+        : data.filter(p => p.professionId == selected);
+
+      if(!filtered || data.length === 0){
         const header=document.getElementById('listaHeader');
         header.innerHTML="Não existem pessoas para listar";
       
       }else{
-        data.forEach(p => {
+        filtered.forEach(p => {
         const div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = `
@@ -64,7 +85,7 @@ addPersonBtn.onclick = () => personForm.classList.remove('hidden');
 cancelPersonBtn.onclick = () => personForm.classList.add('hidden');
 
 savePersonBtn.onclick = () => {
-  const name = document.getElementById('personName').value;
+  const name = personNameInput.value;
   const professionId = professionSelect.value;
 
   if (editingPersonId) {
@@ -89,6 +110,8 @@ savePersonBtn.onclick = () => {
       fetchPeople();
     });
   }
+  personNameInput.value=' ';
+  professionSelect.value=' ';
 };
 
 // Eliminar pessoa
@@ -111,6 +134,9 @@ function editPerson(id) {
     });
 }
 
+filterProfession.addEventListener('change', fetchPeople);
 // Inicialização
-fetchProfessions();
+fetchProfessions(filterProfession, true);
+fetchProfessions(professionSelect);
 fetchPeople();
+

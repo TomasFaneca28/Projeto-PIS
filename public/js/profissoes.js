@@ -2,7 +2,7 @@ const apiUrl = '/api/professions';
 
 const addBtn = document.getElementById('addBtn');
 const formContainer = document.getElementById('formContainer');
-const tipo = document.getElementById('tipo');
+const tipoInput = document.getElementById('tipo');
 const saveBtn = document.getElementById('saveBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 const professionsList = document.getElementById('professionsList');
@@ -19,11 +19,13 @@ function renderProfessions(professions) {
     professionsList.innerHTML = '';
     professions.forEach(p => {
         const div = document.createElement('div');
-        div.className = 'profession';
+        div.className = 'card';
         div.innerHTML = `
-            <strong>${p.tipo}</strong>
-            <button onclick="editProfession(${p.id}, '${p.tipo}')">Editar</button>
-            <button onclick="deleteProfession(${p.id})">Eliminar</button>
+            <h3>${p.tipo}<h3>
+            <div class="actions">
+                <button class="btn outline" onclick="editProfession(${p.id}, '${p.tipo}')">Editar</button>
+                <button class="btn outline" onclick="deleteProfession(${p.id})">Eliminar</button>
+            </div>
         `;
         professionsList.appendChild(div);
     });
@@ -31,7 +33,7 @@ function renderProfessions(professions) {
 
 function editProfession(id, tipo) {
     editingId = id;
-    tipo.value = tipo;
+    tipoInput.value = tipo;
     formContainer.classList.remove('hidden');
 }
 
@@ -44,7 +46,7 @@ function deleteProfession(id) {
 
 addBtn.onclick = () => {
     editingId = null;
-    tipo.value = '';
+    tipoInput.value = '';
     formContainer.classList.remove('hidden');
 };
 
