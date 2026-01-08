@@ -64,14 +64,17 @@ function fetchPeople() {
       
       }else{
         filtered.forEach(p => {
+          console.log(p.photopath);
+        const poster = p.photoPath
+                ? `https://image.tmdb.org/t/p/w500${p.photoPath}`
+                : '/images/logo.svg';
         const div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = `
-          <img src=${p.photopath} />
+          <img src="${poster}" width='20%' />
           <h3>${p.nome}</h3>
           <div>Profissão: ${p.professionName || 'Desconhecida'}</div>
           <div class="actions">
-            <button class="btn outline" onclick="editPerson(${p.id})">Editar</button>
             <button class="btn outline" onclick="deletePerson(${p.id})">Eliminar</button>
           </div>
         `;
@@ -85,7 +88,7 @@ function fetchPeople() {
 }
 
 // Adicionar pessoa
-addPersonBtn.onclick = () => personForm.classList.remove('hidden');
+//addPersonBtn.onclick = () => personForm.classList.remove('hidden');
 cancelPersonBtn.onclick = () => personForm.classList.add('hidden');
 
 savePersonBtn.onclick = () => {
