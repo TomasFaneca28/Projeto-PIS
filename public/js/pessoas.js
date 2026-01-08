@@ -5,6 +5,9 @@ const professionSelect = document.getElementById('professionSelect');
 const filterProfession = document.getElementById('filterProfession');
 const peopleList = document.getElementById('peopleList');
 const personNameInput =document.getElementById('personName');
+const photopathInput =document.getElementById('photopath');
+const dataNascInput =document.getElementById('dataNasc');
+const nacionalidadeinput =document.getElementById('nacionalidade');
 
 const addPersonBtn = document.getElementById('addPersonBtn');
 const personForm = document.getElementById('personForm');
@@ -61,13 +64,17 @@ function fetchPeople() {
       
       }else{
         filtered.forEach(p => {
+          console.log(p.photopath);
+        const poster = p.photoPath
+                ? `https://image.tmdb.org/t/p/w500${p.photoPath}`
+                : '/images/logo.svg';
         const div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = `
-          <h3>${p.name}</h3>
+          <img src="${poster}" width='20%' />
+          <h3>${p.nome}</h3>
           <div>Profissão: ${p.professionName || 'Desconhecida'}</div>
           <div class="actions">
-            <button class="btn outline" onclick="editPerson(${p.id})">Editar</button>
             <button class="btn outline" onclick="deletePerson(${p.id})">Eliminar</button>
           </div>
         `;
@@ -81,19 +88,23 @@ function fetchPeople() {
 }
 
 // Adicionar pessoa
-addPersonBtn.onclick = () => personForm.classList.remove('hidden');
+//addPersonBtn.onclick = () => personForm.classList.remove('hidden');
 cancelPersonBtn.onclick = () => personForm.classList.add('hidden');
 
 savePersonBtn.onclick = () => {
-  const name = personNameInput.value;
+      
+  const nome = personNameInput.value;
   const professionId = professionSelect.value;
+  const photopath = photopathInput.value;
+  const dataNasc = dataNascInput.value;
+  const nacionalidade = nacionalidadeinput.value;
 
   if (editingPersonId) {
     // Editar pessoa
     fetch(`${apiPeople}/${editingPersonId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, professionId })
+      body: JSON.stringify({ nome, professionId, photopath, dataNasc, nacionalidade})
     }).then(() => {
       editingPersonId = null;
       personForm.classList.add('hidden');
@@ -104,14 +115,19 @@ savePersonBtn.onclick = () => {
     fetch(apiPeople, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, professionId })
+      body: JSON.stringify({ nome, professionId, photopath, dataNasc, nacionalidade })
     }).then(() => {
       personForm.classList.add('hidden');
       fetchPeople();
     });
   }
-  personNameInput.value=' ';
-  professionSelect.value=' ';
+  personNameInput.value='';
+  photopathInput.src ='';
+  
+  dataNascInput.value ='';
+  nacionalidadeinput.value ='';
+
+  professionSelect.value='';
 };
 
 // Eliminar pessoa
@@ -128,8 +144,13 @@ function editPerson(id) {
     .then(res => res.json())
     .then(p => {
       editingPersonId = p.id;
-      document.getElementById('personName').value = p.name;
+      personNameInput.value =p.nome;
+      photopathInput.src =p.photopath;
+      const date = new Date(p.dataNascimento);
+      dataNascInput.value = date.getDate().toString();
+      nacionalidadeinput.value =p.nacionalidade;
       professionSelect.value = p.professionId;
+
       personForm.classList.remove('hidden');
     });
 }
