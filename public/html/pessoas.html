@@ -16,30 +16,28 @@
     </div>
    
     <div id="personForm" class="hidden card">
-      <input type="text" id="personName" placeholder="Nome da Pessoa">
+      <input type="text" id="personName" placeholder="Nome" required>
+      <input type="file" id="photopath" placeholder="Imagem" required>
+      <input type="date" id="dataNasc" placeholder="Data de nascimento" required>
+      <input type="text" id="nacionalidade" placeholder="Nacionalidade" required>
       <label>Profissão:</label>
-      <select id="professionSelect"></select>
+      <select id="professionSelect" required></select>
       <div class="actions">
         <button id="savePersonBtn" class="btn primary">Salvar</button>
         <button id="cancelPersonBtn" class="btn outline">Cancelar</button>
       </div>
     </div>
-
     
-        <h2 for="filterProfession">Filtrar por profissão:</h2>
-        <select id="filterProfession" class="custom-select">
-            <option value="all">Todas</option>
-        </select>
-   
-    
+    <h2 for="filterProfession">Filtrar por profissão:</h2>
+    <select id="filterProfession" class="custom-select">
+      <option value="all">Todas</option>
+    </select>
 
-   
     <h2 id="listaHeader">Lista de Pessoas</h2>
     <div id="peopleList" class="grid"></div>
   </div>
 
 </body>
 </html>
-
-<script src="./js/pessoas.js"></script>
 <script src="https://unpkg.com/htmlincludejs"></script>
+<script src="./js/pessoas.js"></script>
