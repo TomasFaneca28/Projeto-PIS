@@ -311,4 +311,33 @@ body {
   border-radius: 8px;
 }
 
+.tmdb-results {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  background: #f9fafb;
+}
+
+/* cartão de cada resultado */
+.tmdb-results .card {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 6px;
+  background: white;
+}
+
+.tmdb-results .card h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tmdb-results .card p {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+
 

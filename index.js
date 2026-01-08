@@ -1,13 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const securePassword = require("./src/services/securePassword");
 const personsRoot = require('./src/routes/pessoas');
 const professionsRoot = require('./src/routes/profissoes');
 const generosRoot = require('./src/routes/generos');
-
-require('dotenv').config();
-const tmdb = require('./src/routes/tmdb');
+const tmdbRoutes = require('./src/routes/tmdb');
 const moviesRoutes = require('./src/routes/movies');
+
 
 const db = require('./src/db/db'); 
 const app = express();
@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/api/tmdb', tmdbRoutes);
 app.use('/api/movies', moviesRoutes);
 
 app.get('/', (req, res) => {

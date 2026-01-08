@@ -3,6 +3,11 @@ const axios = require('axios');
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = process.env.TMDB_API_KEY;
 
+if (!API_KEY) {
+  console.error("❌ ERRO: TMDB_API_KEY não definida no tmdbServices.js");
+  console.error("Valor atual:", API_KEY);
+}
+
 const tmdb = axios.create({
   baseURL: TMDB_BASE_URL,
   params: {
@@ -38,7 +43,15 @@ async function getMovieDetails(movieId) {
   return response.data;
 }
 
+async function getSerieDetails(id) {
+  const response = await tmdb.get(`/tv/${id}`, {
+    params: { append_to_response: 'credits' }
+  });
+  return response.data;
+}
+
 module.exports = {
-  searchMulti,
-  getMovieDetails
+  getMovieDetails,
+  getSerieDetails,
+  searchMulti
 };

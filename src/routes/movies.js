@@ -1,56 +1,72 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/db');
 const tmdbService = require('../services/tmdbServices');
+const db = require('../db/db');
+const TMDB_KEY = process.env.TMDB_API_KEY;
+const {
+  getOrCreatePegi,
+  getOrCreatePessoa,
+  getOrCreateGenero,
+  linkFilmeGenero,
+  linkFilmePessoa,
+  insertFilme
+} = require('../services/importHelpers.js');
 
-router.get('/', (req, res) => {  const query = `
-    SELECT id, nome, posterPath, DataLancamento, tipo
-    FROM Filme
-    ORDER BY DataLancamento DESC
-  `;
-  db.query(query, (err, results) => {
-    if (err) return res.status(500).json({ error: 'Erro ao obter filmes' });
-    res.json(results);
-  }); });
+router.get('/', async (req, res) => {
+  const [rows] = await db.promise().query('SELECT * FROM Filme');
+  res.json(rows);
+});
 
-// POST /api/movies/import/:tmdbId?type=movie
-router.post('/import/:tmdbId', async (req, res) => {
-  const { tmdbId } = req.params;
-  const type = req.query.type || 'movie'; // movie ou tv
+// POST /api/movies/import/:id?type=movie|tv
+router.post('/import/:id', async (req, res) => {
+  const { id } = req.params;
+  const type = req.query.type === 'tv' ? 'SERIE' : 'FILME';
 
   try {
-    const movie = await tmdbService.getMovieDetails(tmdbId, type);
+    const data = type === 'FILME'
+      ? await tmdbService.getMovieDetails(id)
+      : await tmdbService.getSerieDetails(id);
 
-    const insertFilme = `
-      INSERT INTO Filme
-      (nome, idPegi, idDiretorPessoa, DataLancamento, tipo, posterPath, sinopse, duracao)
-      VALUES (?, 1, 1, ?, ?, ?, ?, ?)
-    `;
+    // PEGI default
+    const pegiId = await getOrCreatePegi(12);
 
-    db.query(
-      insertFilme,
-      [
-        movie.title || movie.name,
-        movie.release_date || movie.first_air_date,
-        type.toUpperCase(),
-        movie.poster_path,
-        movie.overview,
-        movie.runtime || movie.episode_run_time?.[0] || 0
-      ],
-      (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: 'Erro ao inserir filme' });
-        }
+    // DIRETOR / CRIADOR
+    const crew = data.credits?.crew || [];
+    const director = crew.find(p => p.job === 'Director');
+    const diretorId = director
+      ? await getOrCreatePessoa(director.id, 'Diretor', TMDB_KEY)
+      : null;
 
-        res.status(201).json({
-          message: `${type === 'movie' ? 'Filme' : 'Série'} importado com sucesso`,
-          filmeId: result.insertId
-        });
-      }
-    );
+    // FILME / SÉRIE
+    const filmeId = await insertFilme({
+      nome: data.title || data.name,
+      dataLancamento: data.release_date || data.first_air_date,
+      tipo: type,
+      poster: data.poster_path,
+      sinopse: data.overview,
+      duracao: data.runtime || data.episode_run_time?.[0] || null,
+      pegi: pegiId,
+      diretor: diretorId
+    });
+
+    // GÉNEROS
+    for (const g of data.genres) {
+      const generoId = await getOrCreateGenero(g.name);
+      await linkFilmeGenero(filmeId, generoId);
+    }
+
+    // ATORES (TOP 5)
+    const cast = data.credits?.cast || [];
+    for (const actor of cast.slice(0, 5)) {
+      const pessoaId = await getOrCreatePessoa(actor.id, 'Ator', TMDB_KEY);
+      await linkFilmePessoa(filmeId, pessoaId, actor.character, actor.order < 3);
+    }
+
+    res.json({ success: true });
+
   } catch (err) {
-    console.error(err.response?.data || err.message);
-    res.status(500).json({ error: 'Erro ao importar da TMDB', details: err.response?.data || err.message });
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao importar TMDB' });
   }
 });
 
