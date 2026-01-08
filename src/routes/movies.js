@@ -1,7 +1,9 @@
 const express = require('express');
+const { promisify } = require('util');
 const router = express.Router();
 const tmdbService = require('../services/tmdbServices');
 const db = require('../db/db');
+const query = promisify(db.query).bind(db);
 const TMDB_KEY = process.env.TMDB_API_KEY;
 const {
   getOrCreatePegi,
@@ -68,6 +70,46 @@ router.post('/import/:id', async (req, res) => {
     console.error(err);
     res.status(500).json({ error: 'Erro ao importar TMDB' });
   }
+});
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const filmeCheck = await query('SELECT * FROM Filme WHERE id = ?', [id]);
+
+        if (filmeCheck.length === 0) {
+            return res.status(404).json({ error: 'Filme não encontrado' });
+        }
+
+        const filme = filmeCheck[0];
+
+        await query('DELETE FROM Review WHERE idFilme = ?', [id]);
+        console.log('🗑️ Reviews eliminadas');
+
+        await query('DELETE FROM Favorito WHERE idFilme = ?', [id]);
+        console.log('🗑️ Favoritos eliminados');
+
+        await query('DELETE FROM FilmeGenero WHERE idFilme = ?', [id]);
+        console.log('🗑️ Géneros desvinculados');
+
+        await query('DELETE FROM FilmePessoa WHERE idFilme = ?', [id]);
+        console.log('🗑️ Atores desvinculados');
+
+        await query('DELETE FROM Filme WHERE id = ?', [id]);
+        console.log('✅ Filme eliminado:', filme.nome);
+
+        res.json({
+            success: true,
+        });
+
+    } catch (err) {
+        console.error('❌ Erro ao eliminar filme:', err);
+        res.status(500).json({
+            error: 'Erro ao eliminar filme',
+            details: err.message
+        });
+    }
 });
 
 module.exports = router;

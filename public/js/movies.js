@@ -18,13 +18,29 @@ function closeReviewDialog() {
     document.getElementById('reviewDialog').style.display = 'none';
 }
 
-function editMovie() {
-    openMovieDialog();
-}
+async function deleteMovie(id, nome) {
+    // Confirmar antes de eliminar
+    if (!confirm(`Tem certeza que deseja eliminar "${nome}"?`)) {
+        return;
+    }
 
-function deleteMovie() {
-    if (confirm('Eliminar este filme?')) {
-        alert('Remover via JS depois');
+    try {
+        const res = await fetch(`${apiMovies}/${id}`, {
+            method: 'DELETE'
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || 'Erro ao eliminar filme');
+        }
+
+        alert('✅ ' + data.message);
+        loadMovies(); // Recarregar a lista
+
+    } catch (err) {
+        console.error('Erro ao eliminar:', err);
+        alert('❌ Erro ao eliminar filme: ' + err.message);
     }
 }
 
@@ -52,8 +68,7 @@ async function loadMovies() {
             </p>
           </div>
           <div class="actions">
-            <button class="btn outline" onclick="editMovie(${movie.id})">Editar</button>
-            <button class="btn outline" onclick="">Eliminar</button>
+            <button class="btn outline" onclick="deleteMovie(${movie.id}, '${movie.nome.replace(/'/g, "\\'")}')">Eliminar</button>
           </div>
         </div>`;
         });
@@ -63,90 +78,89 @@ async function loadMovies() {
     }
 }
 
-function editMovie(id) {
-    fetch(`${apiMovies}/${id}`)
-        .then(res => res.json())
-        .then(p => {
-            editingPersonId = p.id;
-            document.getElementById('personName').value = p.name;
-            professionSelect.value = p.professionId;
-            personForm.classList.remove('hidden');
-        });
-}
-
 function searchMovie() {
-  const q = searchInput.value.trim();
-  if (!q) return;
+    const q = searchInput.value.trim();
+    if (!q) return;
 
-  fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=movie`)
-    .then(res => res.json())
-    .then(movies => {
-      results.innerHTML = '';
-      if (!Array.isArray(movies)) {
-        results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
-        return;
-      }
-      movies.forEach(m => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
+    fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=movie`)
+        .then(res => res.json())
+        .then(movies => {
+            results.innerHTML = '';
+            if (!Array.isArray(movies)) {
+                results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
+                return;
+            }
+            movies.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = `
           <h3>${m.title}</h3>
           <p>${m.release_date || ''}</p>
           <button class="btn-primary" onclick="importFromTMDB(${m.id}, 'FILME')">
             Importar
           </button>
         `;
-        results.appendChild(div);
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      results.innerHTML = '<p class="text-red-500">Erro ao pesquisar filmes</p>';
-    });
+                results.appendChild(div);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            results.innerHTML = '<p class="text-red-500">Erro ao pesquisar filmes</p>';
+        });
 }
 
 function searchSerie() {
-  const q = searchInput.value.trim();
-  if (!q) return;
+    const q = searchInput.value.trim();
+    if (!q) return;
 
-  fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=tv`)
-    .then(res => res.json())
-    .then(movies => {
-      results.innerHTML = '';
-      if (!Array.isArray(movies)) {
-        results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
-        return;
-      }
-      movies.forEach(m => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.innerHTML = `
+    fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=tv`)
+        .then(res => res.json())
+        .then(movies => {
+            results.innerHTML = '';
+            if (!Array.isArray(movies)) {
+                results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
+                return;
+            }
+            movies.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerHTML = `
           <h3>${m.title}</h3>
           <p>${m.release_date || ''}</p>
           <button class="btn-primary" onclick="importFromTMDB(${m.id}, 'SERIE')">
             Importar
           </button>
         `;
-        results.appendChild(div);
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      results.innerHTML = '<p class="text-red-500">Erro ao pesquisar filmes</p>';
-    });
+                results.appendChild(div);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            results.innerHTML = '<p class="text-red-500">Erro ao pesquisar filmes</p>';
+        });
 }
 
 async function importFromTMDB(id, type) {
-  try {
-    const res = await fetch(`/api/movies/import/${id}?type=${type}`, {
-      method: 'POST'
-    });
-    if (!res.ok) throw new Error('Erro na importação');
-    closeMovieDialog();
-    loadMovies();
-  } catch (err) {
-    console.error(err);
-    alert('⚠️ Filme já existe na BD');
-  }
+    try {
+        const res = await fetch(`/api/movies/import/${id}?type=${type}`, {
+            method: 'POST'
+        });
+        if (!res.ok) throw new Error('Erro na importação');
+        closeMovieDialog();
+        loadMovies();
+    } catch (err) {
+        console.error(err);
+        alert('⚠️ Filme já existe na BD');
+    }
 }
+
+function searchByType() {
+    const type = document.getElementById('movieType').value;
+    if (type === 'FILME') {
+        searchMovie();
+    } else {
+        searchSerie();
+    }
+}
+
 loadMovies();
