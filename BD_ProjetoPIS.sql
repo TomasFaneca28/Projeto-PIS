@@ -1,54 +1,60 @@
-create database projetopis;
-use projetopis;
+CREATE DATABASE IF NOT EXISTS projetopis;
+USE projetopis;
 
-CREATE TABLE TipoUtilizador (
+CREATE TABLE IF NOT EXISTS TipoUtilizador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE TipoProfissao (
+CREATE TABLE IF NOT EXISTS TipoProfissao (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Pegi (
+CREATE TABLE IF NOT EXISTS Pegi (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo INT NOT NULL
 );
 
-CREATE TABLE Utilizador (
+CREATE TABLE IF NOT EXISTS Utilizador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     tipo INT NOT NULL,
-    FOREIGN KEY (tipo) REFERENCES TipoUtilizador(id)
+    FOREIGN KEY (tipo) REFERENCES TipoUtilizador(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Pessoa (
+CREATE TABLE IF NOT EXISTS Pessoa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     tipo INT NOT NULL,
-    FOREIGN KEY (tipo) REFERENCES TipoProfissao(id)
+    photopath VARCHAR(255),
+    dataNascimento DATE,
+    nacionalidade VARCHAR(255),
+    FOREIGN KEY (tipo) REFERENCES TipoProfissao(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Genero (
+CREATE TABLE IF NOT EXISTS Genero (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Filme (
+CREATE TABLE IF NOT EXISTS Filme (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     idPegi INT NOT NULL,
     idDiretorPessoa INT NOT NULL,
     DataLancamento DATETIME NOT NULL,
     tipo ENUM('FILME', 'SERIE') NOT NULL,
-    FOREIGN KEY (idPegi) REFERENCES Pegi(id),
-    FOREIGN KEY (idDiretorPessoa) REFERENCES Pessoa(id)
+    posterPath VARCHAR(255),
+    sinopese TEXT,
+    duracao INT,
+    FOREIGN KEY (idPegi) REFERENCES Pegi(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idDiretorPessoa) REFERENCES Pessoa(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Review (
+CREATE TABLE IF NOT EXISTS Review (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idUtilizador INT NOT NULL,
     idFilme INT NOT NULL,
@@ -56,36 +62,35 @@ CREATE TABLE Review (
     avaliacao TINYINT NOT NULL,
     critica TEXT,
     votosUtilidade INT,
-    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id),
-    FOREIGN KEY (idFilme) REFERENCES Filme(id)
+    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idFilme) REFERENCES Filme(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE Favorito (
+CREATE TABLE IF NOT EXISTS Favorito (
     idFilme INT NOT NULL,
     idUtilizador INT NOT NULL,
     PRIMARY KEY(idFilme, idUtilizador),
-    FOREIGN KEY (idFilme) REFERENCES Filme(id),
-    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id)
+    FOREIGN KEY (idFilme) REFERENCES Filme(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE FilmeGenero (
+CREATE TABLE IF NOT EXISTS FilmeGenero (
     idFilme INT NOT NULL,
     idGenero INT NOT NULL,
     PRIMARY KEY(idFilme, idGenero),
-    FOREIGN KEY (idFilme) REFERENCES Filme(id),
-    FOREIGN KEY (idGenero) REFERENCES Genero(id)
+    FOREIGN KEY (idFilme) REFERENCES Filme(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idGenero) REFERENCES Genero(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE FilmePessoa (
+CREATE TABLE IF NOT EXISTS FilmePessoa (
     idFilme INT NOT NULL,
     idPessoa INT NOT NULL,
     papel TEXT NOT NULL,
     elencoPrincipal BOOLEAN NOT NULL,
     PRIMARY KEY(idFilme, idPessoa),
-    FOREIGN KEY (idFilme) REFERENCES Filme(id),
-    FOREIGN KEY (idPessoa) REFERENCES Pessoa(id)
+    FOREIGN KEY (idFilme) REFERENCES Filme(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idPessoa) REFERENCES Pessoa(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO TipoUtilizador (tipo)
 VALUES ('normalUser'), ('adminUser');
-
