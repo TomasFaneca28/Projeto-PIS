@@ -21,9 +21,11 @@ const loadFavoritos = async () => {
     favoritos.forEach(filme => {
       html += `
         <li>
+        <a href="/filmeDetails?id=${filme.id}" style="text-decoration: none;color:inherit;">
           <strong>${filme.nome}</strong> (${filme.tipo})
           <br/>
           <small>Lançamento: ${new Date(filme.DataLancamento).toLocaleDateString('pt-PT')}</small>
+          </a>
         </li>
       `;
     });
