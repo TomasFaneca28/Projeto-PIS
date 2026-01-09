@@ -1,6 +1,18 @@
 const apiMovies = '/api/movies';
 const searchInput = document.getElementById('searchInput');
 const results = document.getElementById('results');
+let isAdmin = false;
+
+// Inicializar permissões do utilizador
+async function initPermissions() {
+  try {
+    const res = await fetch('/api/user-info');
+    const data = await res.json();
+    isAdmin = !!data && data.tipoUtilizador === 2;
+  } catch (err) {
+    isAdmin = false;
+  }
+}
 
 function openMovieDialog() {
     document.getElementById('movieDialog').style.display = 'flex';
@@ -86,9 +98,9 @@ async function loadMovies() {
               <span class="badge">${movie.tipo}</span>
             </div>
           </a>
-          <div class="actions">
+          ${isAdmin ? `<div class="actions">
             <button class="btn outline" onclick="event.stopPropagation(); deleteMovie(${movie.id}, '${movie.nome.replace(/'/g, "\\'")}')">Eliminar</button>
-          </div>
+          </div>` : ''}
         </div>`;
         });
 
@@ -209,3 +221,6 @@ async function checkUserPermissions() {
 }
 
 checkUserPermissions();
+
+// Inicializar permissões antes de carregar filmes
+initPermissions().then(loadMovies).catch(loadMovies);

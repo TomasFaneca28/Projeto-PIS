@@ -35,7 +35,7 @@ async function loadStats() {
     const data = await res.json();
     const { stats, recentMovies, recentReviews } = data;
 
-    console.log('📊 Estatísticas carregadas:', data);
+    console.log('Estatísticas carregadas:', data);
 
     // Atualizar contadores com animação
     animateCounter(document.getElementById('moviesCount'), stats.filmes);
@@ -52,7 +52,7 @@ async function loadStats() {
     renderRecentReviews(recentReviews);
 
   } catch (err) {
-    console.error('❌ Erro ao carregar estatísticas:', err);
+    console.error('Erro ao carregar estatísticas:', err);
     
     // Mostrar 0 nos contadores em caso de erro
     ['moviesCount', 'seriesCount', 'actorsCount', 'directorsCount', 'genresCount', 'reviewsCount']
@@ -116,8 +116,8 @@ function renderRecentReviews(reviews) {
   }
 
   container.innerHTML = reviews.map(review => {
-    // Criar estrelas baseado na avaliação (0-10 convertido para 0-5 estrelas)
-    const stars = Math.round(review.avaliacao / 2);
+    // Criar estrelas baseado na avaliação (1-5)
+    const stars = review.avaliacao;
     const starsHTML = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
 
     // Truncar crítica se for muito longa
@@ -137,7 +137,7 @@ function renderRecentReviews(reviews) {
             </div>
             <div class="text-right">
               <div class="stars">${starsHTML}</div>
-              <span class="text-xs text-gray-500">${review.avaliacao}/10</span>
+              <span class="text-xs text-gray-500">${review.avaliacao}/5</span>
             </div>
           </div>
           ${review.critica ? `
