@@ -1,5 +1,4 @@
-require('dotenv').config(); // ← DEVE SER A PRIMEIRA LINHA
-
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const securePassword = require("./src/services/securePassword");

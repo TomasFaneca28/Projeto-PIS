@@ -74,10 +74,10 @@ function fetchPeople() {
         <a href="../html/pessoaDetails.html?id=${p.id}" style="text-decoration: none; color: inherit;">
           <img src="${poster}" width='30%' />
           <h3>${p.nome}</h3>
-          <div>Profissão: ${p.professionName || 'Desconhecida'}</div>
+          <div>Profissão: ${p.professionName || 'Desconhecida'}</div></a>
           <div class="actions">
             <button class="btn outline" onclick="deletePerson(${p.id})">Eliminar</button>
-          </div></a>
+          </div>
         `;
         peopleList.appendChild(div);
       });

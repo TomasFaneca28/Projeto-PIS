@@ -85,7 +85,6 @@ async function loadMovies() {
             </div>
           </a>
           <div class="actions">
-            <button class="btn outline" onclick="event.stopPropagation(); editMovie(${movie.id})">Editar</button>
             <button class="btn outline" onclick="event.stopPropagation(); deleteMovie(${movie.id}, '${movie.nome.replace(/'/g, "\\'")}')">Eliminar</button>
           </div>
         </div>`;

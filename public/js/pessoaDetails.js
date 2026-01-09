@@ -47,7 +47,7 @@ async function loadPerson() {
         <h2>🎬 Filmes como Diretor(a)</h2>
         <div class="movies-list">
           ${filmesComoDiretor.map(f => `
-            <a href="filme.html?id=${f.idFilme}">
+            <a href="filmeDetails?id=${f.idFilme}">
               <div class="movie-card">
                 <h3>🎥 ${f.titulo}</h3>
                 <p><strong>Papel:</strong> ${f.papel}</p>
@@ -62,7 +62,7 @@ async function loadPerson() {
         <h2>🎭 Filmes como Ator/Atriz</h2>
         <div class="movies-list">
           ${filmesComoAtor.map(f => `
-            <a href="filme.html?id=${f.idFilme}">
+            <a href="filmeDetails?id=${f.idFilme}">
               <div class="movie-card">
                 <h3>${f.titulo}</h3>
                 <p><strong>Papel:</strong> ${f.papel}</p>
