@@ -71,7 +71,7 @@ function fetchPeople() {
         const div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = `
-        <a href="../html/pessoaDetails.html?id=${p.id}" style="text-decoration: none; color: inherit;">
+        <a href="/pessoaDetails?id=${p.id}" style="text-decoration: none; color: inherit;">
           <img src="${poster}" width='30%' />
           <h3>${p.nome}</h3>
           <div>Profissão: ${p.professionName || 'Desconhecida'}</div></a>
