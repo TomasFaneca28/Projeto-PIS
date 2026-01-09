@@ -339,5 +339,33 @@ body {
   color: #6b7280;
 }
 
+.fab-add {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+
+  border: none;
+  outline: none;
+
+  background: #2563eb; /* azul bonito */
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+}
+
 
 

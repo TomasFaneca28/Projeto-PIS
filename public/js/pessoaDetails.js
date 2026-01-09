@@ -8,13 +8,18 @@ async function loadPerson() {
   try {
     const res = await fetch(`${apiPeopleMovie}/${pessoaID}`);
     const data = await res.json();
-    const { pessoa, filmes } = data;
 
-    const avatar = pessoa.photopath 
-      ? `https://image.tmdb.org/t/p/w500${pessoa.photopath}` 
+    if (!res.ok || !data || !data.pessoa) {
+      throw new Error(data?.error || 'Pessoa não encontrada');
+    }
+
+    const { pessoa, filmes = [] } = data;
+
+    const avatar = pessoa.photopath
+      ? `https://image.tmdb.org/t/p/w500${pessoa.photopath}`
       : 'logo.svg';
 
-    const dataNascimento = pessoa.dataNascimento 
+    const dataNascimento = pessoa.dataNascimento
       ? new Date(pessoa.dataNascimento).toLocaleDateString('pt-PT')
       : 'Desconhecida';
 

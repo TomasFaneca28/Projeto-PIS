@@ -14,6 +14,85 @@ const {
   insertFilme
 } = require('../services/importHelpers.js');
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Buscar informações do filme
+    const filmeRows = await query(`
+      SELECT 
+        f.*,
+        p.tipo as pegiTipo,
+        diretor.nome as diretorNome,
+        diretor.photopath as diretorPhoto
+      FROM Filme f
+      LEFT JOIN Pegi p ON f.idPegi = p.id
+      LEFT JOIN Pessoa diretor ON f.idDiretorPessoa = diretor.id
+      WHERE f.id = ?
+    `, [id]);
+
+    if (filmeRows.length === 0) {
+      return res.status(404).json({ error: 'Filme não encontrado' });
+    }
+
+    const filme = filmeRows[0];
+
+    // Buscar géneros do filme
+    const generos = await query(`
+      SELECT g.nome
+      FROM FilmeGenero fg
+      JOIN Genero g ON fg.idGenero = g.id
+      WHERE fg.idFilme = ?
+    `, [id]);
+
+    // Buscar elenco (atores e equipe)
+    const elenco = await query(`
+      SELECT 
+        p.id,
+        p.nome,
+        p.photopath,
+        fp.papel,
+        fp.elencoPrincipal,
+        tp.tipo as profissao
+      FROM FilmePessoa fp
+      JOIN Pessoa p ON fp.idPessoa = p.id
+      JOIN TipoProfissao tp ON p.tipo = tp.id
+      WHERE fp.idFilme = ?
+      ORDER BY fp.elencoPrincipal DESC, p.nome
+    `, [id]);
+
+    // Buscar reviews
+    const reviews = await query(`
+      SELECT 
+        r.*,
+        u.username
+      FROM Review r
+      JOIN Utilizador u ON r.idUtilizador = u.id
+      WHERE r.idFilme = ?
+      ORDER BY r.dataReview DESC
+    `, [id]);
+
+    // Calcular média de avaliações
+    let mediaAvaliacao = 0;
+    if (reviews.length > 0) {
+      const soma = reviews.reduce((acc, r) => acc + r.avaliacao, 0);
+      mediaAvaliacao = (soma / reviews.length).toFixed(1);
+    }
+
+    res.json({
+      filme,
+      generos: generos.map(g => g.nome),
+      elenco,
+      reviews,
+      mediaAvaliacao
+    });
+
+  } catch (err) {
+    console.error('Erro ao buscar detalhes do filme:', err);
+    res.status(500).json({ error: 'Erro ao buscar detalhes do filme' });
+  }
+});
+
 router.get('/', async (req, res) => {
   const [rows] = await db.promise().query('SELECT * FROM Filme');
   res.json(rows);

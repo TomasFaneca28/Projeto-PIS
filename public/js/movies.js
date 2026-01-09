@@ -46,35 +46,55 @@ async function deleteMovie(id, nome) {
 
 async function loadMovies() {
     try {
+        console.log('🔄 Carregando filmes...');
         const res = await fetch('/api/movies');
+        
+        console.log('📡 Response status:', res.status);
+        console.log('📡 Response headers:', res.headers.get('content-type'));
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
         const movies = await res.json();
+        console.log('✅ Filmes carregados:', movies);
 
         const container = document.getElementById('moviesGrid');
         container.innerHTML = '';
 
+        if (!Array.isArray(movies) || movies.length === 0) {
+            container.innerHTML = '<p style="color: white; text-align: center;">Nenhum filme encontrado.</p>';
+            return;
+        }
+
         movies.forEach(movie => {
             const poster = movie.posterPath
                 ? `https://image.tmdb.org/t/p/w300${movie.posterPath}`
-                : '/img/no-poster.png';
+                : 'https://via.placeholder.com/300x450/cccccc/666666?text=Sem+Poster';
 
             container.innerHTML += `
         <div class="card border-blue-100 hover:shadow-lg transition-shadow">
-          <img src="${poster}" style="width:30%; border-radius:8px">
-
-          <div class="card-content space-y-2">
-            <h3 class="text-blue-900">${movie.nome}</h3>
-            <p class="text-xs text-gray-500">
-              ${movie.DataLancamento?.substring(0, 4) ?? ''}
-            </p>
-          </div>
+          <a href="filmeDetails?id=${movie.id}" style="text-decoration: none; color: inherit;">
+            <img src="${poster}" style="width:100%; border-radius:8px" alt="${movie.nome}">
+            <div class="card-content space-y-2">
+              <h3 class="text-blue-900">${movie.nome}</h3>
+              <p class="text-xs text-gray-500">
+                ${movie.DataLancamento?.substring(0, 4) ?? ''}
+              </p>
+              <span class="badge">${movie.tipo}</span>
+            </div>
+          </a>
           <div class="actions">
-            <button class="btn outline" onclick="deleteMovie(${movie.id}, '${movie.nome.replace(/'/g, "\\'")}')">Eliminar</button>
+            <button class="btn outline" onclick="event.stopPropagation(); editMovie(${movie.id})">Editar</button>
+            <button class="btn outline" onclick="event.stopPropagation(); deleteMovie(${movie.id}, '${movie.nome.replace(/'/g, "\\'")}')">Eliminar</button>
           </div>
         </div>`;
         });
 
     } catch (err) {
-        console.error('Erro ao carregar filmes', err);
+        console.error('❌ Erro ao carregar filmes:', err);
+        const container = document.getElementById('moviesGrid');
+        container.innerHTML = '<p style="color: red; text-align: center;">Erro ao carregar filmes. Verifica a consola.</p>';
     }
 }
 
