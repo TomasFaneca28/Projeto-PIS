@@ -7,7 +7,7 @@ const professionsRoot = require('./src/routes/profissoes');
 const generosRoot = require('./src/routes/generos');
 const tmdbRoutes = require('./src/routes/tmdb');
 const moviesRoutes = require('./src/routes/movies');
-
+const filmePessoaRoot = require('./src/routes/filmePessoa');
 
 const db = require('./src/db/db'); 
 const app = express();
@@ -53,6 +53,7 @@ app.get('/generos', (req, res) => {
 
 app.use('/api/genero',generosRoot);
 app.use('/api/pessoas',personsRoot);
+app.use('/api/pessoasFilme',filmePessoaRoot);
 app.use('/api/professions',professionsRoot);
 
 //API

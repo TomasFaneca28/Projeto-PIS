@@ -71,12 +71,13 @@ function fetchPeople() {
         const div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = `
-          <img src="${poster}" width='20%' />
+        <a href="../html/pessoaDetails.html?id=${p.id}" style="text-decoration: none; color: inherit;">
+          <img src="${poster}" width='30%' />
           <h3>${p.nome}</h3>
           <div>Profissão: ${p.professionName || 'Desconhecida'}</div>
           <div class="actions">
             <button class="btn outline" onclick="deletePerson(${p.id})">Eliminar</button>
-          </div>
+          </div></a>
         `;
         peopleList.appendChild(div);
       });
