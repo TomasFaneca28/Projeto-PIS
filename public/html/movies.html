@@ -25,6 +25,41 @@
 
         </section>
 
+          <!-- BARRA DE PESQUISA E FILTROS -->
+        <section class="search-filters">
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    id="searchFilmes" 
+                    placeholder="🔍 Pesquisar por nome..." 
+                    class="search-input"
+                />
+            </div>
+            
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="filterTipo">Tipo</label>
+                    <select id="filterTipo" class="filter-select">
+                        <option value="TODOS">📋 Todos</option>
+                        <option value="FILME">🎬 Filmes</option>
+                        <option value="SERIE">📺 Séries</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterGenero">Género</label>
+                    <select id="filterGenero" class="filter-select">
+                        <option value="TODOS">🎭 Todos os Géneros</option>
+                        <!-- Géneros serão carregados via JS -->
+                    </select>
+                </div>
+
+                <button class="btn-clear" onclick="clearFilters()">
+                    🔄 Limpar Filtros
+                </button>
+            </div>
+        </section>
+
         <!-- GRID DE FILMES -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="moviesGrid">
             <!-- Filmes entram aqui via JS -->
@@ -52,7 +87,7 @@
 
                     <input id="searchInput" type="text" placeholder="Ex: Inception" />
 
-                    <button type="button" class="btn-primary w-full" onclick="searchByType()">
+                    <button type="button" class="btn-primary w-full" onclick="search()">
                         🔍 Pesquisar
                     </button>
 

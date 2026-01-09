@@ -5,11 +5,14 @@ const requireAdmin = require('../middleware/requireAdmin');
 
 
 // GET all professions
-router.get('/', (req, res) => {
-    db.query('SELECT * FROM Genero', (err, results) => {
-        if (err) return res.status(500).json(err);
-        res.json(results);
-    });
+router.get('/', async (req, res) => {
+  try {
+    const generos = await query('SELECT * FROM Genero ORDER BY nome');
+    res.json(generos);
+  } catch (err) {
+    console.error('Erro ao listar géneros:', err);
+    res.status(500).json({ error: 'Erro ao listar géneros' });
+  }
 });
 
 // POST add new profession

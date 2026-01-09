@@ -100,6 +100,52 @@ router.get('/stats/overview', async (req, res) => {
   }
 });
 
+// GET /api/movies/filter - Filtrar filmes por nome, tipo e género
+router.get('/filter/search', async (req, res) => {
+  try {
+    const { nome, tipo, genero } = req.query;
+    
+    let sql = `
+      SELECT DISTINCT f.*
+      FROM Filme f
+      LEFT JOIN FilmeGenero fg ON f.id = fg.idFilme
+      LEFT JOIN Genero g ON fg.idGenero = g.id
+      WHERE 1=1
+    `;
+    
+    const params = [];
+
+    // Filtro por nome
+    if (nome && nome.trim() !== '') {
+      sql += ' AND f.nome LIKE ?';
+      params.push(`%${nome}%`);
+    }
+
+    // Filtro por tipo (FILME ou SERIE)
+    if (tipo && tipo !== 'TODOS') {
+      sql += ' AND f.tipo = ?';
+      params.push(tipo);
+    }
+
+    // Filtro por género
+    if (genero && genero !== 'TODOS') {
+      sql += ' AND g.id = ?';
+      params.push(genero);
+    }
+
+    sql += ' ORDER BY f.DataLancamento DESC';
+
+    console.log('🔍 Query de filtro:', sql);
+    console.log('📋 Parâmetros:', params);
+
+    const filmes = await query(sql, params);
+    
+    res.json(filmes);
+
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao filtrar filmes' });
+  }
+});
 router.get('/', async (req, res) => {
   try {
     const rows = await query('SELECT * FROM Filme');
