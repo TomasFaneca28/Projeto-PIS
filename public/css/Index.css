@@ -68,6 +68,40 @@ body {
     background: #eef4ff;
 }
 
+.user-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.user-actions button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.user-actions button:hover {
+    background-color: #ff5252;
+}
+
+.user-actions a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.user-actions a:hover {
+    background-color: #333;
+}
+
 /* ----------- RESPONSIVO ----------- */
 
 /* Telas pequenas */

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="./css/perfil.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div class="container" style="max-width: 900px; margin: 30px auto; padding: 20px;">
+
+        <div class="profile-header">
+            <div class="avatar">👤</div>
+            <div class="profile-header-info">
+                <h2 id="username">Utilizador</h2>
+                <p id="email"></p>
+            </div>
+
+            <button class="edit-btn">✏️ Editar Perfil</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <span>❤️</span>
+                <p><strong id="favoritos-count">0</strong><br>Filmes Favoritos</p>
+            </div>
+
+            <div class="stat-card">
+                <span>⭐</span>
+                <p><strong id="reviews-count">0</strong><br>Reviews Escritas</p>
+            </div>
+
+            <div class="stat-card">
+                <span>🎬</span>
+                <p><strong id="filmes">0</strong><br>Total de Filmes</p>
+            </div>
+        </div>
+
+        <div class="fav-section">
+            <h3>❤️ Filmes Favoritos</h3>
+            <div id="favoritos-container">
+                <div class="fav-empty">
+                    <span>💔</span>
+                    Carregando favoritos...
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h3>⭐ Minhas Reviews</h3>
+            <div id="reviews-container">
+                <p>Carregando reviews...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/perfil.js"></script>
+    <script src="./js/perfilData.js"></script>
+    <script src="/js/loadNavbar.js"></script>
+    <script src="/js/logout.js"></script>
+</body>
+
+</html>
