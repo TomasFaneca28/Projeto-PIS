@@ -1,6 +1,7 @@
 const apiMovies = '/api/movies';
 const searchInput = document.getElementById('searchInput');
 const results = document.getElementById('results');
+<<<<<<< Updated upstream
 let isAdmin = false;
 
 // Inicializar permissões do utilizador
@@ -13,9 +14,14 @@ async function initPermissions() {
     isAdmin = false;
   }
 }
+=======
+const movieTypeSelect = document.getElementById('movieType');
+>>>>>>> Stashed changes
 
 function openMovieDialog() {
     document.getElementById('movieDialog').style.display = 'flex';
+    results.innerHTML = '<p class="text-sm text-gray-400">Pesquisa um filme ou série para ver resultados</p>';
+    searchInput.value = '';
 }
 
 function closeMovieDialog() {
@@ -199,7 +205,68 @@ function searchByType() {
         searchMovie();
     } else {
         searchSerie();
+    const q = searchInput.value.trim();
+    const selectedType = movieTypeSelect.value; // 'FILME' ou 'SERIE'
+    
+    if (!q) {
+        alert('Por favor, digite algo para pesquisar');
+        return;
     }
+
+    // Converter tipo para formato da API TMDB
+    const tmdbType = selectedType === 'SERIE' ? 'tv' : 'movie';
+    
+    console.log(`🔍 Pesquisando ${selectedType}:`, q);
+
+    fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=${tmdbType}`)
+        .then(res => res.json())
+        .then(items => {
+            results.innerHTML = '';
+            
+            if (!Array.isArray(items)) {
+                results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
+                return;
+            }
+
+            if (items.length === 0) {
+                results.innerHTML = `<p class="text-gray-500">Nenhum ${selectedType.toLowerCase()} encontrado para "${q}"</p>`;
+                return;
+            }
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                
+                // Filmes têm 'title' e 'release_date'
+                // Séries têm 'name' e 'first_air_date'
+                const titulo = item.title || item.name;
+                const data = item.release_date || item.first_air_date || '';
+                const poster = item.poster_path 
+                    ? `https://image.tmdb.org/t/p/w92${item.poster_path}`
+                    : '';
+
+                div.innerHTML = `
+                    <div style="display: flex; gap: 1rem; align-items: start;">
+                        ${poster ? `<img src="${poster}" style="width: 60px; border-radius: 4px;">` : ''}
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 0.5rem 0;">${titulo}</h3>
+                            <p style="margin: 0; color: #666; font-size: 0.9rem;">${data}</p>
+                            <button 
+                                class="btn-primary" 
+                                style="margin-top: 0.75rem;"
+                                onclick="importFromTMDB(${item.id}, '${tmdbType}')">
+                                ➕ Importar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                results.appendChild(div);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            results.innerHTML = '<p class="text-red-500">Erro ao pesquisar. Verifica a consola.</p>';
+        });
 }
 
 loadMovies();
@@ -219,6 +286,12 @@ async function checkUserPermissions() {
     console.log('Erro ao verificar permissões');
   }
 }
+
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        searchByType();
+    }
+});
 
 checkUserPermissions();
 
