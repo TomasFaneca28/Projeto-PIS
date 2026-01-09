@@ -110,7 +110,7 @@ router.get('/user-info', requireLogin, (req, res) => {
     return res.status(401).json({ error: 'Utilizador não autenticado' });
   }
 
-  const query = 'SELECT id, username, email FROM utilizador WHERE id = ?';
+  const query = 'SELECT id, username, email, tipo FROM utilizador WHERE id = ?';
   db.query(query, [req.session.userId], (err, results) => {
     if (err) {
       return res.status(500).json({ error: 'Erro ao obter informações do utilizador' });
@@ -121,10 +121,30 @@ router.get('/user-info', requireLogin, (req, res) => {
     }
 
     const user = results[0];
-    res.status(200).json({
-      userId: user.id,
-      username: user.username,
-      email: user.email,
+
+    // Contar reviews do utilizador
+    const reviewCountQuery = 'SELECT COUNT(*) as reviewCount FROM Review WHERE idUtilizador = ?';
+    db.query(reviewCountQuery, [req.session.userId], (err, reviewResults) => {
+      if (err) {
+        console.error('Erro ao contar reviews:', err);
+      }
+
+      // Contar favoritos do utilizador
+      const favCountQuery = 'SELECT COUNT(*) as favCount FROM Favorito WHERE idUtilizador = ?';
+      db.query(favCountQuery, [req.session.userId], (err, favResults) => {
+        if (err) {
+          console.error('Erro ao contar favoritos:', err);
+        }
+
+        res.status(200).json({
+          userId: user.id,
+          username: user.username,
+          email: user.email,
+          tipoUtilizador: user.tipo,
+          reviewCount: reviewResults && reviewResults.length > 0 ? reviewResults[0].reviewCount : 0,
+          favoritosCount: favResults && favResults.length > 0 ? favResults[0].favCount : 0
+        });
+      });
     });
   });
 });
@@ -168,6 +188,66 @@ router.get('/reviews', requireLogin, (req, res) => {
       return res.status(500).json({ error: 'Erro ao obter reviews' });
     }
     res.status(200).json(results || []);
+  });
+});
+
+// Adicionar/remover filme dos favoritos
+router.post('/favoritos/:id', requireLogin, (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'É necessário estar autenticado' });
+  }
+
+  const filmeId = req.params.id;
+  const userId = req.session.userId;
+
+  // Verificar se o filme já é favorito
+  const checkQuery = 'SELECT * FROM Favorito WHERE idUtilizador = ? AND idFilme = ?';
+  db.query(checkQuery, [userId, filmeId], (err, results) => {
+    if (err) {
+      console.error('Erro ao verificar favorito:', err);
+      return res.status(500).json({ error: 'Erro ao verificar favorito' });
+    }
+
+    if (results.length > 0) {
+      // Remover dos favoritos
+      const deleteQuery = 'DELETE FROM Favorito WHERE idUtilizador = ? AND idFilme = ?';
+      db.query(deleteQuery, [userId, filmeId], (err) => {
+        if (err) {
+          console.error('Erro ao remover favorito:', err);
+          return res.status(500).json({ error: 'Erro ao remover favorito' });
+        }
+        res.status(200).json({ message: 'Removido dos favoritos', isFavorito: false });
+      });
+    } else {
+      // Adicionar aos favoritos
+      const insertQuery = 'INSERT INTO Favorito (idUtilizador, idFilme) VALUES (?, ?)';
+      db.query(insertQuery, [userId, filmeId], (err) => {
+        if (err) {
+          console.error('Erro ao adicionar favorito:', err);
+          return res.status(500).json({ error: 'Erro ao adicionar favorito' });
+        }
+        res.status(201).json({ message: 'Adicionado aos favoritos', isFavorito: true });
+      });
+    }
+  });
+});
+
+//Verificar se é favorito
+router.get('/check-favorito/:id', requireLogin, (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'É necessário estar autenticado' });
+  }
+
+  const filmeId = req.params.id;
+  const userId = req.session.userId;
+
+  const query = 'SELECT * FROM Favorito WHERE idUtilizador = ? AND idFilme = ?';
+  db.query(query, [userId, filmeId], (err, results) => {
+    if (err) {
+      console.error('Erro ao verificar favorito:', err);
+      return res.status(500).json({ error: 'Erro ao verificar favorito' });
+    }
+    res.status(200).json({ isFavorito: results.length > 0 });
   });
 });
 

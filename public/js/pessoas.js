@@ -106,10 +106,14 @@ savePersonBtn.onclick = () => {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, professionId, photopath, dataNasc, nacionalidade})
-    }).then(() => {
-      editingPersonId = null;
-      personForm.classList.add('hidden');
-      fetchPeople();
+    }).then(res => {
+      if (res.status === 403) {
+        alert('Apenas administradores podem editar pessoas');
+      } else {
+        editingPersonId = null;
+        personForm.classList.add('hidden');
+        fetchPeople();
+      }
     });
   } else {
     // Adicionar nova pessoa
@@ -117,9 +121,13 @@ savePersonBtn.onclick = () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, professionId, photopath, dataNasc, nacionalidade })
-    }).then(() => {
-      personForm.classList.add('hidden');
-      fetchPeople();
+    }).then(res => {
+      if (res.status === 403) {
+        alert('Apenas administradores podem adicionar pessoas');
+      } else {
+        personForm.classList.add('hidden');
+        fetchPeople();
+      }
     });
   }
   personNameInput.value='';
@@ -135,7 +143,14 @@ savePersonBtn.onclick = () => {
 function deletePerson(id) {
   if (confirm('Tem certeza que deseja eliminar esta pessoa?')) {
     fetch(`${apiPeople}/${id}`, { method: 'DELETE' })
-      .then(fetchPeople);
+      .then(res => {
+        if (res.status === 403) {
+          alert('Apenas administradores podem eliminar pessoas');
+        } else {
+          return res.json().then(() => fetchPeople());
+        }
+      })
+      .catch(err => console.error(err));
   }
 }
 

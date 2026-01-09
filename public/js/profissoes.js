@@ -40,7 +40,14 @@ function editProfession(id, tipo) {
 function deleteProfession(id) {
     if (confirm('Tem certeza que deseja eliminar esta profissão?')) {
         fetch(`${apiUrl}/${id}`, { method: 'DELETE' })
-            .then(() => fetchProfessions());
+            .then(res => {
+                if (res.status === 403) {
+                    alert('Apenas administradores podem eliminar profissões');
+                } else {
+                    return res.json().then(() => fetchProfessions());
+                }
+            })
+            .catch(err => console.error(err));
     }
 }
 
@@ -63,18 +70,26 @@ saveBtn.onclick = () => {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then(() => {
-            formContainer.classList.add('hidden');
-            fetchProfessions();
+        }).then(res => {
+            if (res.status === 403) {
+                alert('Apenas administradores podem editar profissões');
+            } else {
+                formContainer.classList.add('hidden');
+                fetchProfessions();
+            }
         });
     } else {
         fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then(() => {
-            formContainer.classList.add('hidden');
-            fetchProfessions();
+        }).then(res => {
+            if (res.status === 403) {
+                alert('Apenas administradores podem adicionar profissões');
+            } else {
+                formContainer.classList.add('hidden');
+                fetchProfessions();
+            }
         });
     }
 };

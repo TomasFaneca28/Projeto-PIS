@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db= require('../db/db');
+const requireAdmin = require('../middleware/requireAdmin');
 
 
 // GET all professions
@@ -12,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 // POST add new profession
-router.post('/', (req, res) => {
+router.post('/', requireAdmin, (req, res) => {
     const {nome} = req.body;
     db.query(
         'INSERT INTO Genero (nome) VALUES (?)',
@@ -25,7 +26,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT update profession
-router.put('/:id', (req, res) => {
+router.put('/:id', requireAdmin, (req, res) => {
     const { id } = req.params;
     const { nome } = req.body;
     db.query(
@@ -39,7 +40,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE profession
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireAdmin, (req, res) => {
     const { id } = req.params;
     db.query('DELETE FROM Genero WHERE id = ?', [id], (err) => {
         if (err) return res.status(500).json(err);

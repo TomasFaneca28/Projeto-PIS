@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db= require('../db/db');
+const requireAdmin = require('../middleware/requireAdmin');
 
 router.get('/', (req, res) => {
   const sql = `
@@ -58,7 +59,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST nova pessoa
-router.post('/', (req, res) => {
+router.post('/', requireAdmin, (req, res) => {
   const {
     nome,
     professionId,
@@ -88,7 +89,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT atualizar pessoa
-router.put('/:id', (req, res) => {
+router.put('/:id', requireAdmin, (req, res) => {
   const { id } = req.params;
   const {
     nome,
@@ -111,7 +112,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE pessoa
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireAdmin, (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM Pessoa WHERE id = ?', [id], (err) => {
     if (err) return res.status(500).json(err);

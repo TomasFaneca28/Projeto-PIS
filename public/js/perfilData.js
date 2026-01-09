@@ -1,11 +1,6 @@
 // Carrega favoritos do utilizador
 const loadFavoritos = async () => {
   const favoritosContainer = document.getElementById('favoritos-container');
-  
-  if (!favoritosContainer) {
-    console.warn('Elemento #favoritos-container não encontrado');
-    return;
-  }
 
   try {
     const response = await fetch('/api/favoritos');
@@ -44,11 +39,6 @@ const loadFavoritos = async () => {
 // Carrega reviews do utilizador
 const loadReviews = async () => {
   const reviewsContainer = document.getElementById('reviews-container');
-  
-  if (!reviewsContainer) {
-    console.warn('Elemento #reviews-container não encontrado');
-    return;
-  }
 
   try {
     const response = await fetch('/api/reviews');
@@ -71,7 +61,7 @@ const loadReviews = async () => {
         <li>
           <strong>${review.filmeNome}</strong>
           <br/>
-          <strong>Avaliação:</strong> ${review.avaliacao}/10
+          <strong>Avaliação:</strong> ${review.avaliacao}/5
           <br/>
           <strong>Review:</strong> ${review.critica || 'Sem texto'}
           <br/>

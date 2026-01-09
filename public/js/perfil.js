@@ -3,6 +3,8 @@ const loadProfile = async () => {
 	const username = document.getElementById('username');
 	const email = document.getElementById('email');
 	const userId = document.getElementById('userId');
+	const reviewsCount = document.getElementById('reviews-count');
+	const favoritosCount = document.getElementById('favoritos-count');
 
 	try {
 		const response = await fetch('/api/user-info');
@@ -17,6 +19,8 @@ const loadProfile = async () => {
 		if (username) username.textContent = data.username || '-';
 		if (email) email.textContent = data.email || '-';
 		if (userId) userId.textContent = data.userId || '-';
+		if (reviewsCount) reviewsCount.textContent = data.reviewCount || 0;
+		if (favoritosCount) favoritosCount.textContent = data.favoritosCount || 0;
 	} catch (error) {
 		console.error('Erro ao carregar perfil:', error);
 		alert('Erro ao carregar perfil');

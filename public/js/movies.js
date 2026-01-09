@@ -31,6 +31,11 @@ async function deleteMovie(id, nome) {
 
         const data = await res.json();
 
+        if (res.status === 403) {
+            alert('Apenas administradores podem eliminar filmes');
+            return;
+        }
+
         if (!res.ok) {
             throw new Error(data.error || 'Erro ao eliminar filme');
         }
@@ -40,24 +45,21 @@ async function deleteMovie(id, nome) {
 
     } catch (err) {
         console.error('Erro ao eliminar:', err);
-        alert('❌ Erro ao eliminar filme: ' + err.message);
+        alert('Erro ao eliminar filme: ' + err.message);
     }
 }
 
 async function loadMovies() {
     try {
-        console.log('🔄 Carregando filmes...');
+        console.log('A carregar filmes...');
         const res = await fetch('/api/movies');
-        
-        console.log('📡 Response status:', res.status);
-        console.log('📡 Response headers:', res.headers.get('content-type'));
         
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
         
         const movies = await res.json();
-        console.log('✅ Filmes carregados:', movies);
+        console.log('Filmes carregados:', movies);
 
         const container = document.getElementById('moviesGrid');
         container.innerHTML = '';
@@ -91,7 +93,7 @@ async function loadMovies() {
         });
 
     } catch (err) {
-        console.error('❌ Erro ao carregar filmes:', err);
+        console.error('Erro ao carregar filmes:', err);
         const container = document.getElementById('moviesGrid');
         container.innerHTML = '<p style="color: red; text-align: center;">Erro ao carregar filmes. Verifica a consola.</p>';
     }
@@ -164,12 +166,18 @@ async function importFromTMDB(id, type) {
         const res = await fetch(`/api/movies/import/${id}?type=${type}`, {
             method: 'POST'
         });
+        
+        if (res.status === 403) {
+            alert('Apenas administradores podem importar filmes');
+            return;
+        }
+        
         if (!res.ok) throw new Error('Erro na importação');
         closeMovieDialog();
         loadMovies();
     } catch (err) {
         console.error(err);
-        alert('⚠️ Filme já existe na BD');
+        alert('O filme já existe na BD');
     }
 }
 
@@ -183,3 +191,21 @@ function searchByType() {
 }
 
 loadMovies();
+
+// Verificar tipo de utilizador e esconder botão de adicionar para normais
+async function checkUserPermissions() {
+  try {
+    const userRes = await fetch("/api/user-info");
+    const userData = await userRes.json();
+    
+    if (userData.tipoUtilizador && userData.tipoUtilizador !== 2) {
+      // Utilizador normal - esconder botão de adicionar
+      const addBtn = document.querySelector('button[onclick="openMovieDialog()"]');
+      if (addBtn) addBtn.style.display = 'none';
+    }
+  } catch (err) {
+    console.log('Erro ao verificar permissões');
+  }
+}
+
+checkUserPermissions();

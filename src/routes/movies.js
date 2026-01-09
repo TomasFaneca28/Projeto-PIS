@@ -3,6 +3,7 @@ const { promisify } = require('util');
 const router = express.Router();
 const tmdbService = require('../services/tmdbServices');
 const db = require('../db/db');
+const requireAdmin = require('../middleware/requireAdmin');
 const query = promisify(db.query).bind(db);
 const TMDB_KEY = process.env.TMDB_API_KEY;
 const {
@@ -99,7 +100,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/movies/import/:id?type=movie|tv
-router.post('/import/:id', async (req, res) => {
+router.post('/import/:id', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const type = req.query.type === 'tv' ? 'SERIE' : 'FILME';
 
@@ -151,7 +152,7 @@ router.post('/import/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
 
     try {

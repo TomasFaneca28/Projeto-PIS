@@ -38,9 +38,16 @@ function editGenero(id, nome) {
 }
 
 function deleteGenero(id) {
-    if (confirm('Tem certeza que deseja eliminar esta profissão?')) {
+    if (confirm('Tem certeza que deseja eliminar este género?')) {
         fetch(`${apiUrl}/${id}`, { method: 'DELETE' })
-            .then(() => fetchGeneros());
+            .then(res => {
+                if (res.status === 403) {
+                    alert('Apenas administradores podem eliminar géneros');
+                } else {
+                    return res.json().then(() => fetchGeneros());
+                }
+            })
+            .catch(err => console.error(err));
     }
 }
 
@@ -62,18 +69,26 @@ saveBtn.onclick = () => {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then(() => {
-            formContainer.classList.add('hidden');
-            fetchGeneros();
+        }).then(res => {
+            if (res.status === 403) {
+                alert('Apenas administradores podem editar géneros');
+            } else {
+                formContainer.classList.add('hidden');
+                fetchGeneros();
+            }
         });
     } else {
         fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then(() => {
-            formContainer.classList.add('hidden');
-            fetchGeneros();
+        }).then(res => {
+            if (res.status === 403) {
+                alert('Apenas administradores podem adicionar géneros');
+            } else {
+                formContainer.classList.add('hidden');
+                fetchGeneros();
+            }
         });
     }
     nomeInput.value = '';

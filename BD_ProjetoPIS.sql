@@ -94,3 +94,10 @@ CREATE TABLE IF NOT EXISTS FilmePessoa (
 
 INSERT INTO TipoUtilizador (tipo)
 VALUES ('normalUser'), ('adminUser');
+CREATE TABLE IF NOT EXISTS ReviewUtil (
+    idUtilizador INT NOT NULL,
+    idReview INT NOT NULL,
+    PRIMARY KEY(idUtilizador, idReview),
+    FOREIGN KEY (idUtilizador) REFERENCES Utilizador(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idReview) REFERENCES Review(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
