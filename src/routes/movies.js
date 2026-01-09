@@ -89,8 +89,8 @@ router.get('/:id', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Erro ao buscar detalhes do filme:', err);
-    res.status(500).json({ error: 'Erro ao buscar detalhes do filme' });
+    console.error('Erro ao obter detalhes do filme:', err);
+    res.status(500).json({ error: 'Erro ao obter detalhes do filme' });
   }
 });
 

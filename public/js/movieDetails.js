@@ -171,7 +171,7 @@ async function loadFilme() {
     }
   } catch (err) {
     console.error(err);
-    detalhes.innerHTML = '<div class="error"><p>Erro ao carregar os dados do filme.</p></div>';
+    detalhes.innerHTML = '<div class="error"><p>Erro a carregar os dados do filme.</p></div>';
   }
 }
 

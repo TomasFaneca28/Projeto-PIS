@@ -1,4 +1,4 @@
-// Middleware para verificar se o utilizador esta autenticado
+// Middleware para verificar se o utilizador está autenticado
 const requireLogin = (req, res, next) => {
   if (req.session && req.session.userId) {
     next();

@@ -16,6 +16,18 @@ const cancelPersonBtn = document.getElementById('cancelPersonBtn');
 
 let professions = [];
 let editingPersonId = null; 
+let isAdmin = false;
+
+// Inicializar permissões do utilizador
+async function initPermissions() {
+  try {
+    const res = await fetch('/api/user-info');
+    const data = await res.json();
+    isAdmin = !!data && data.tipoUtilizador === 2;
+  } catch (err) {
+    isAdmin = false;
+  }
+}
 
 //serve para fazer um request para selecionar todas as profissões e também para preencher os select's pretendidos
 
@@ -60,7 +72,7 @@ function fetchPeople() {
 
       if(!filtered || data.length === 0){
         const header=document.getElementById('listaHeader');
-        header.innerHTML="Não existem pessoas para listar";
+        header.innerHTML="Não existem pessoas a listar";
       
       }else{
         filtered.forEach(p => {
@@ -75,9 +87,9 @@ function fetchPeople() {
           <img src="${poster}" width='30%' />
           <h3>${p.nome}</h3>
           <div>Profissão: ${p.professionName || 'Desconhecida'}</div></a>
-          <div class="actions">
+          ${isAdmin ? `<div class="actions">
             <button class="btn outline" onclick="deletePerson(${p.id})">Eliminar</button>
-          </div>
+          </div>` : ''}
         `;
         peopleList.appendChild(div);
       });
@@ -175,5 +187,5 @@ filterProfession.addEventListener('change', fetchPeople);
 // Inicialização
 fetchProfessions(filterProfession, true);
 fetchProfessions(professionSelect);
-fetchPeople();
+initPermissions().then(fetchPeople).catch(fetchPeople);
 

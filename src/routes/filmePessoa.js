@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
   `;
 
   db.query(query, [pessoaId], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Erro ao buscar pessoa e filmes' });
+    if (err) return res.status(500).json({ error: 'Erro ao obter pessoa e filmes' });
     if (results.length === 0) return res.status(404).json({ error: 'Pessoa não encontrada' });
 
     // Extrair dados da pessoa (todos iguais)

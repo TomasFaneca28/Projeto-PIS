@@ -42,8 +42,8 @@ async function getOrCreateTipoProfissao(nome) {
 }
 
 async function getPersonDetailsFromTMDb(personId, apiKey) {
-  const res = await fetch(`https://api.themoviedb.org/3/person/${personId}?api_key=${apiKey}&language=pt-BR`);
-  if (!res.ok) throw new Error('Erro ao buscar pessoa no TMDb');
+  const res = await fetch(`https://api.themoviedb.org/3/person/${personId}?api_key=${apiKey}&language=pt-PT`);
+  if (!res.ok) throw new Error('Erro ao obter pessoa no TMDb');
   const data = await res.json();
   return {
     nome: data.name,

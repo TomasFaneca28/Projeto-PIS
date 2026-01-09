@@ -81,7 +81,7 @@ async function loadPerson() {
     `;
   } catch (err) {
     console.error(err);
-    detalhes.innerHTML = '<div class="no-movies"><p>Erro ao carregar os dados.</p></div>';
+    detalhes.innerHTML = '<div class="no-movies"><p>Erro a carregar os dados.</p></div>';
   }
 }
 

@@ -7,13 +7,13 @@ const requireLogin = require('../middleware/requireLogin');
 router.post('/registo', async (req, res) => {
   const { nome, email, password, confirmPassword } = req.body;
 
-  // Validar campos obrigatorios
+  // Validar campos obrigatórios
   if (!nome || !email || !password || !confirmPassword) {
-    return res.status(400).json({error: 'Todos os campos sao obrigatorios' });
+    return res.status(400).json({error: 'Todos os campos são obrigatórios' });
   }
 
   if (password !== confirmPassword) {
-    return res.status(400).json({error: 'As palavras-passe nao coincidem' });
+    return res.status(400).json({error: 'As palavras-passe não coincidem' });
   }
 
   const getTipoIdQuery = 'SELECT id FROM tipoutilizador WHERE tipo = "normalUser"';
@@ -30,7 +30,7 @@ router.post('/registo', async (req, res) => {
 
     const tipoId = results[0].id;
 
-    // Verificar se o email ja esta registado
+    // Verificar se o email já está registado
     const verificaEmailQuery = 'SELECT * FROM utilizador WHERE email = ?';
     db.query(verificaEmailQuery, [email], async (err, results) => {
       if (err) {
@@ -38,7 +38,7 @@ router.post('/registo', async (req, res) => {
       }
 
       if (results.length > 0) {
-        return res.status(400).json({error: 'Email ' + email + ' ja esta registado' });
+        return res.status(400).json({error: 'Email ' + email + ' já está registado' });
       }
 
       // Inserir o novo utilizador na base de dados
@@ -60,7 +60,7 @@ router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({error: 'Email e palavra-passe sao obrigatorios' });
+    return res.status(400).json({error: 'Email e palavra-passe são obrigatórios' });
   }
 
   // Procura apenas o utilizador com o email fornecido
@@ -72,7 +72,7 @@ router.post('/login', (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(401).json({error: 'Email '+ email + ' nao se encontra registado' });
+      return res.status(401).json({error: 'Email '+ email + ' não se encontra registado' });
     }
 
     const user = results[0];

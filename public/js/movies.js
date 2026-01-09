@@ -95,7 +95,7 @@ async function loadMovies() {
     } catch (err) {
         console.error('Erro ao carregar filmes:', err);
         const container = document.getElementById('moviesGrid');
-        container.innerHTML = '<p style="color: red; text-align: center;">Erro ao carregar filmes. Verifica a consola.</p>';
+        container.innerHTML = '<p style="color: red; text-align: center;">Erro ao carregar filmes. Verificar a consola.</p>';
     }
 }
 

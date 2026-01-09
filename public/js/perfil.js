@@ -22,8 +22,8 @@ const loadProfile = async () => {
 		if (reviewsCount) reviewsCount.textContent = data.reviewCount || 0;
 		if (favoritosCount) favoritosCount.textContent = data.favoritosCount || 0;
 	} catch (error) {
-		console.error('Erro ao carregar perfil:', error);
-		alert('Erro ao carregar perfil');
+		console.error('Erro a carregar perfil:', error);
+		alert('Erro a carregar perfil');
 		window.location.href = '/login';
 	}
 };

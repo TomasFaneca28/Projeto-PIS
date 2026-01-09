@@ -7,8 +7,8 @@ const loadFavoritos = async () => {
     const favoritos = await response.json();
 
     if (!response.ok) {
-      console.error('Erro ao carregar favoritos:', favoritos.error);
-      favoritosContainer.innerHTML = '<p>Erro ao carregar favoritos</p>';
+      console.error('Erro a carregar favoritos:', favoritos.error);
+      favoritosContainer.innerHTML = '<p>Erro a carregar favoritos</p>';
       return;
     }
 
@@ -31,8 +31,8 @@ const loadFavoritos = async () => {
 
     favoritosContainer.innerHTML = html;
   } catch (error) {
-    console.error('Erro ao buscar favoritos:', error);
-    favoritosContainer.innerHTML = '<p>Erro ao carregar favoritos</p>';
+    console.error('Erro ao obter favoritos:', error);
+    favoritosContainer.innerHTML = '<p>Erro a carregar favoritos</p>';
   }
 };
 
@@ -45,8 +45,8 @@ const loadReviews = async () => {
     const reviews = await response.json();
 
     if (!response.ok) {
-      console.error('Erro ao carregar reviews:', reviews.error);
-      reviewsContainer.innerHTML = '<p>Erro ao carregar reviews</p>';
+      console.error('Erro a carregar reviews:', reviews.error);
+      reviewsContainer.innerHTML = '<p>Erro a carregar reviews</p>';
       return;
     }
 
@@ -76,8 +76,8 @@ const loadReviews = async () => {
 
     reviewsContainer.innerHTML = html;
   } catch (error) {
-    console.error('Erro ao buscar reviews:', error);
-    reviewsContainer.innerHTML = '<p>Erro ao carregar reviews</p>';
+    console.error('Erro ao obter reviews:', error);
+    reviewsContainer.innerHTML = '<p>Erro a carregar reviews</p>';
   }
 };
 
