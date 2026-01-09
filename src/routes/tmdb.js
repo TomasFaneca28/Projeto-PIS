@@ -10,12 +10,28 @@ if (!TMDB_KEY) {
 }
 
 router.get('/search', async (req, res) => {
-  const { query } = req.query;
+  const { query, type } = req.query; // type = 'movie' ou 'tv'
+
+  if (!query) {
+    return res.status(400).json({ error: 'Query é obrigatória' });
+  }
 
   try {
-    const r = await axios.get('https://api.themoviedb.org/3/search/movie', {
-      params: { api_key: TMDB_KEY, query, language: 'pt-PT' }
+    // Determinar o endpoint baseado no tipo
+    const endpoint = type === 'tv' 
+      ? 'https://api.themoviedb.org/3/search/tv'
+      : 'https://api.themoviedb.org/3/search/movie';
+
+    const r = await axios.get(endpoint, {
+      params: { 
+        api_key: TMDB_KEY, 
+        query, 
+        language: 'pt-PT' 
+      }
     });
+
+    console.log(`🔍 Pesquisa TMDB [${type || 'movie'}]:`, query, '→', r.data.results.length, 'resultados');
+    
     res.json(r.data.results);
   } catch (err) {
     console.error('Erro na pesquisa TMDB:', err.response?.data || err.message);

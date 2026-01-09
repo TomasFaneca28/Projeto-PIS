@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Filme (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     idPegi INT NOT NULL,
-    idDiretorPessoa INT NOT NULL,
+    idDiretorPessoa INT,
     DataLancamento DATETIME NOT NULL,
     tipo ENUM('FILME', 'SERIE') NOT NULL,
     posterPath VARCHAR(255),

@@ -42,8 +42,8 @@
             <div class="grid grid-cols-2 gap-6 items-start">
                 <label>Tipo</label>
                 <select id="movieType">
-                    <option value="FILME">Filme</option>
-                    <option value="SERIE">Série</option>
+                    <option value="FILME">🎬 Filme</option>
+                    <option value="SERIE">📺 Série</option>
                 </select>
 
                 <!-- ESQUERDA: PESQUISA -->
@@ -52,7 +52,7 @@
 
                     <input id="searchInput" type="text" placeholder="Ex: Inception" />
 
-                    <button type="button" class="btn-primary w-full" onclick="searchMovie()">
+                    <button type="button" class="btn-primary w-full" onclick="searchByType()">
                         🔍 Pesquisar
                     </button>
 

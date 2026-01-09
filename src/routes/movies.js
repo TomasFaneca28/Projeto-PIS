@@ -95,14 +95,19 @@ router.get('/stats/overview', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('❌ Erro ao buscar estatísticas:', err);
+    console.error('Erro ao buscar estatísticas:', err);
     res.status(500).json({ error: 'Erro ao buscar estatísticas' });
   }
 });
 
 router.get('/', async (req, res) => {
-  const [rows] = await db.promise().query('SELECT * FROM Filme');
-  res.json(rows);
+  try {
+    const rows = await query('SELECT * FROM Filme');
+    res.json(rows);
+  } catch (err) {
+    console.error('Erro ao listar filmes:', err);
+    res.status(500).json({ error: 'Erro ao listar filmes' });
+  }
 });
 
 router.get('/:id', async (req, res) => {
@@ -193,15 +198,49 @@ router.post('/import/:id', requireAdmin, async (req, res) => {
       ? await tmdbService.getMovieDetails(id)
       : await tmdbService.getSerieDetails(id);
 
+    // Verificar se já existe ANTES de importar
+    const existingCheck = await query(
+        `SELECT id FROM Filme 
+         WHERE nome = ? AND DataLancamento = ? AND tipo = ?`,
+        [data.title || data.name, data.release_date || data.first_air_date, type]
+    );
+
+    if (existingCheck.length > 0) {
+        return res.status(400).json({ 
+            error: 'Este filme/série já foi importado',
+            filmeId: existingCheck[0].id 
+        });
+    }
+
     // PEGI default
     const pegiId = await getOrCreatePegi(12);
 
     // DIRETOR / CRIADOR
-    const crew = data.credits?.crew || [];
-    const director = crew.find(p => p.job === 'Director');
-    const diretorId = director
-      ? await getOrCreatePessoa(director.id, 'Diretor', TMDB_KEY)
-      : null;
+    let diretorId = null;
+
+    if (type === 'FILME') {
+      // Para filmes, procurar "Director" nos créditos
+      const crew = data.credits?.crew || [];
+      const director = crew.find(p => p.job === 'Director');
+      
+      if (director) {
+        diretorId = await getOrCreatePessoa(director.id, 'Diretor', TMDB_KEY);
+      }
+    } else {
+      // Para séries, usar "created_by" (criadores)
+      if (data.created_by && data.created_by.length > 0) {
+        const creator = data.created_by[0];
+        diretorId = await getOrCreatePessoa(creator.id, 'Diretor', TMDB_KEY);
+      } else {
+        // Fallback: procurar "Executive Producer" nos créditos
+        const crew = data.credits?.crew || [];
+        const execProducer = crew.find(p => p.job === 'Executive Producer');
+        
+        if (execProducer) {
+          diretorId = await getOrCreatePessoa(execProducer.id, 'Diretor', TMDB_KEY);
+        }
+      }
+    }
 
     // FILME / SÉRIE
     const filmeId = await insertFilme({
@@ -212,11 +251,11 @@ router.post('/import/:id', requireAdmin, async (req, res) => {
       sinopse: data.overview,
       duracao: data.runtime || data.episode_run_time?.[0] || null,
       pegi: pegiId,
-      diretor: diretorId
+      diretor: diretorId // Pode ser null
     });
 
     // GÉNEROS
-    for (const g of data.genres) {
+    for (const g of data.genres || []) {
       const generoId = await getOrCreateGenero(g.name);
       await linkFilmeGenero(filmeId, generoId);
     }
@@ -225,14 +264,21 @@ router.post('/import/:id', requireAdmin, async (req, res) => {
     const cast = data.credits?.cast || [];
     for (const actor of cast.slice(0, 5)) {
       const pessoaId = await getOrCreatePessoa(actor.id, 'Ator', TMDB_KEY);
-      await linkFilmePessoa(filmeId, pessoaId, actor.character, actor.order < 3);
+      await linkFilmePessoa(filmeId, pessoaId, actor.character || 'Ator', actor.order < 3);
     }
 
-    res.json({ success: true });
+    res.json({ 
+      success: true,
+      filmeId,
+      message: `${type === 'FILME' ? 'Filme' : 'Série'} importado com sucesso!`
+    });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao importar TMDB' });
+    console.error('❌ Erro ao importar:', err);
+    res.status(500).json({ 
+      error: 'Erro ao importar TMDB',
+      details: err.message 
+    });
   }
 });
 
@@ -265,10 +311,11 @@ router.delete('/:id', requireAdmin, async (req, res) => {
 
     res.json({
       success: true,
+      message: `${filme.nome} foi eliminado com sucesso!`
     });
 
   } catch (err) {
-    console.error('❌ Erro ao eliminar filme:', err);
+    console.error('Erro ao eliminar filme:', err);
     res.status(500).json({
       error: 'Erro ao eliminar filme',
       details: err.message
