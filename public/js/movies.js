@@ -1,7 +1,6 @@
 const apiMovies = '/api/movies';
 const searchInput = document.getElementById('searchInput');
 const results = document.getElementById('results');
-<<<<<<< Updated upstream
 let isAdmin = false;
 
 // Inicializar permissões do utilizador
@@ -14,9 +13,8 @@ async function initPermissions() {
     isAdmin = false;
   }
 }
-=======
 const movieTypeSelect = document.getElementById('movieType');
->>>>>>> Stashed changes
+
 
 function openMovieDialog() {
     document.getElementById('movieDialog').style.display = 'flex';
@@ -117,67 +115,6 @@ async function loadMovies() {
     }
 }
 
-function searchMovie() {
-    const q = searchInput.value.trim();
-    if (!q) return;
-
-    fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=movie`)
-        .then(res => res.json())
-        .then(movies => {
-            results.innerHTML = '';
-            if (!Array.isArray(movies)) {
-                results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
-                return;
-            }
-            movies.forEach(m => {
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-          <h3>${m.title}</h3>
-          <p>${m.release_date || ''}</p>
-          <button class="btn-primary" onclick="importFromTMDB(${m.id}, 'FILME')">
-            Importar
-          </button>
-        `;
-                results.appendChild(div);
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            results.innerHTML = '<p class="text-red-500">Erro ao pesquisar filmes</p>';
-        });
-}
-
-function searchSerie() {
-    const q = searchInput.value.trim();
-    if (!q) return;
-
-    fetch(`/api/tmdb/search?query=${encodeURIComponent(q)}&type=tv`)
-        .then(res => res.json())
-        .then(movies => {
-            results.innerHTML = '';
-            if (!Array.isArray(movies)) {
-                results.innerHTML = '<p class="text-red-500">Erro: dados inválidos</p>';
-                return;
-            }
-            movies.forEach(m => {
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-          <h3>${m.title}</h3>
-          <p>${m.release_date || ''}</p>
-          <button class="btn-primary" onclick="importFromTMDB(${m.id}, 'SERIE')">
-            Importar
-          </button>
-        `;
-                results.appendChild(div);
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            results.innerHTML = '<p class="text-red-500">Erro ao pesquisar filmes</p>';
-        });
-}
 
 async function importFromTMDB(id, type) {
     try {
@@ -200,11 +137,6 @@ async function importFromTMDB(id, type) {
 }
 
 function searchByType() {
-    const type = document.getElementById('movieType').value;
-    if (type === 'FILME') {
-        searchMovie();
-    } else {
-        searchSerie();
     const q = searchInput.value.trim();
     const selectedType = movieTypeSelect.value; // 'FILME' ou 'SERIE'
     
